@@ -1,13 +1,16 @@
 import React from 'react';
-import { Text, View } from 'react-native';
-import styles from '../styles/HomeStyles.js';
+import { View, Button } from 'react-native';
 
-const Home = () => {
+function Home({ navigation }) {
+  const handleNavigate = () => {
+    navigation.navigate('Login');
+  };
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Logado</Text>
+    <View>
+      <Button title="Deslogar" onPress={handleNavigate} />
     </View>
   );
-};
+}
 
 export default Home;

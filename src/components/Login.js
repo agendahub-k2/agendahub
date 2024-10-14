@@ -34,7 +34,8 @@ export default function Login({ navigation }) {
       const token = response.data.token; 
       
       await AsyncStorage.setItem('userToken', token);
-      navigation.replace('Home');
+      console.log("Navegando para Home");
+      navigation.navigate('Home');
     } catch (error) {
       Alert.alert('Erro', 'Email ou senha inválidos');
       console.error(error);

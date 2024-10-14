@@ -4,8 +4,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Login from './src/components/Login';
-import Home from './src/components/Home'; 
-import styles from './src/styles/styles'; 
+import Home from './src/components/Home';
+import Register from './src/components/Register';
+import styles from './src/styles/styles';
 
 const Stack = createStackNavigator();
 
@@ -17,8 +18,6 @@ export default function App() {
     const checkAuthentication = async () => {
       try {
         const token = await AsyncStorage.getItem('userToken');
-        console.log('token: ' + token);
-        
         if (token) {
           const response = await fetch('http://localhost:8080/user/authenticate', {
             method: 'GET',
@@ -27,11 +26,7 @@ export default function App() {
             },
           });
 
-          if (response.ok) {
-            setIsAuthenticated(true);
-          } else {
-            setIsAuthenticated(false);
-          }
+          setIsAuthenticated(response.ok);
         } else {
           setIsAuthenticated(false);
         }
@@ -42,6 +37,7 @@ export default function App() {
         setLoading(false);
       }
     };
+
     checkAuthentication();
   }, []);
 
@@ -52,14 +48,13 @@ export default function App() {
       </View>
     );
   }
+
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        {isAuthenticated ? (
-          <Stack.Screen name="Home" component={Home} />
-        ) : (
-          <Stack.Screen name="Login" component={Login} />
-        )}
+      <Stack.Navigator initialRouteName={isAuthenticated ? 'Home' : 'Login'}>
+        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="Register" component={Register} />
       </Stack.Navigator>
     </NavigationContainer>
   );
