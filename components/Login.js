@@ -12,7 +12,7 @@ import {
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function Login() {
+export default function Login({ navigation }) { // Aqui
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showAlert, setShowAlert] = useState(false);
@@ -33,7 +33,7 @@ export default function Login() {
     try {
       const response = await axios.post('http://localhost:8080/user/login', userData);
       const token = response.data.token; // Supondo que o token está na propriedade 'token'
-      
+
       // Salvar o token usando AsyncStorage
       await AsyncStorage.setItem('userToken', token);
       
