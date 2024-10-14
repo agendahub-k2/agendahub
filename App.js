@@ -3,58 +3,55 @@ import { ActivityIndicator, View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import Login from './components/Login';
-import Home from './components/Home'; // Verifique o nome correto dos componentes
+import Login from './src/components/Login';
+import Home from './src/components/Home'; 
+import styles from './src/styles/styles'; 
 
 const Stack = createStackNavigator();
 
 export default function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(null); // Estado para controle de autenticação
-  const [loading, setLoading] = useState(true); // Estado de loading
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const checkAuthentication = async () => {
       try {
-        // Pegando o token armazenado no AsyncStorage
         const token = await AsyncStorage.getItem('userToken');
         console.log('token: ' + token);
         
         if (token) {
-          // Fazendo a requisição com o token recuperado
           const response = await fetch('http://localhost:8080/user/authenticate', {
             method: 'GET',
             headers: {
-              'Authorization': `Bearer ${token}`, // Passando o token no cabeçalho
+              'Authorization': `Bearer ${token}`,
             },
           });
 
           if (response.ok) {
-            setIsAuthenticated(true); // Usuário está autenticado
+            setIsAuthenticated(true);
           } else {
-            setIsAuthenticated(false); // Usuário não está autenticado
+            setIsAuthenticated(false);
           }
         } else {
-          setIsAuthenticated(false); // Se não tiver token, não está autenticado
+          setIsAuthenticated(false);
         }
       } catch (error) {
         console.error('Erro ao verificar autenticação:', error);
-        setIsAuthenticated(false); // Se houver erro, considerar como não autenticado
+        setIsAuthenticated(false);
       } finally {
-        setLoading(false); // Remover loading após verificar
+        setLoading(false);
       }
     };
-
     checkAuthentication();
   }, []);
 
   if (loading) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" color="#007BFF" /> {/* Indicador de carregamento */}
+      <View style={styles.container}>
+        <ActivityIndicator size="large" color="#007BFF" />
       </View>
     );
   }
-
   return (
     <NavigationContainer>
       <Stack.Navigator>

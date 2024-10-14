@@ -1,13 +1,4 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-
-const Home = () => {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Logado</Text>
-    </View>
-  );
-};
+import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
@@ -23,4 +14,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Home;
+export default styles;
