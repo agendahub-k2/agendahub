@@ -5,12 +5,27 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f0f0f0',
+    padding: 20,
+    backgroundColor: '#E8F5FE', 
   },
-  text: {
-    fontSize: 24,
+  title: {
+    fontSize: 28,
     fontWeight: 'bold',
-    color: '#007BFF',
+    color: '#1E3A8A', 
+    textAlign: 'center',
+    marginBottom: 40,
+  },
+  button: {
+    backgroundColor: '#3B82F6',
+    borderRadius: 10,
+    padding: 15,
+    alignItems: 'center',
+    width: '100%',
+  },
+  buttonText: {
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
 });
 

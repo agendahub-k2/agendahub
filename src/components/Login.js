@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Text, 
   View, 
@@ -10,13 +10,19 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Icon from 'react-native-vector-icons/Ionicons';
 import styles from '../styles/LoginStyles.js';
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showAlert, setShowAlert] = useState(false);
-  const [message, setMessage] = useState(''); 
+  const [message, setMessage] = useState('');
+  const [secureTextEntry, setSecureTextEntry] = useState(true);
+
+  useEffect(() => {
+    navigation.setOptions({ headerShown: false });
+  }, [navigation]);
 
   const handleLogin = async () => {
     if (email.trim() === '' || password.trim() === '') {
@@ -34,7 +40,6 @@ export default function Login({ navigation }) {
       const token = response.data.token; 
       
       await AsyncStorage.setItem('userToken', token);
-      console.log("Navegando para Home");
       navigation.navigate('Home');
     } catch (error) {
       Alert.alert('Erro', 'Email ou senha inválidos');
@@ -55,13 +60,23 @@ export default function Login({ navigation }) {
           keyboardType="email-address"
         />
 
-        <TextInput
-          style={styles.input}
-          placeholder="Senha"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-        />
+        <View style={styles.passwordContainer}>
+          <TextInput
+            style={styles.passwordInput}
+            placeholder="Senha"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry={secureTextEntry}
+          />
+          <TouchableOpacity onPress={() => setSecureTextEntry(!secureTextEntry)}>
+            <Icon 
+              name={secureTextEntry ? 'eye-off' : 'eye'} 
+              size={24} 
+              color="#3B82F6" 
+              style={styles.eyeIcon}
+            />
+          </TouchableOpacity>
+        </View>
 
         <TouchableOpacity style={styles.button} onPress={handleLogin}>
           <Text style={styles.buttonText}>Entrar</Text>

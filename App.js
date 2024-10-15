@@ -10,6 +10,7 @@ import styles from './src/styles/styles';
 
 const Stack = createStackNavigator();
 
+
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
   const [loading, setLoading] = useState(true);
