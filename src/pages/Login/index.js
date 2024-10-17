@@ -4,7 +4,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import * as Animatable from 'react-native-animatable';
-import styles from './indexStyles'; 
+import styles from './indexStyles';
+
 
 export default function Login() {
     const navigation = useNavigation(); 
@@ -40,7 +41,7 @@ export default function Login() {
 
             <View style={styles.containerHeader}>
                 <Text style={styles.message}>LOGIN</Text>
-                <Text style={styles.subMessage}>Preencha os campos abaixo para acessar sua conta.</Text>
+                <Text style={styles.neonText}>Preencha os campos abaixo para acessar sua conta.</Text>
             </View>
 
             <Animatable.View ref={animRef} style={styles.containerForm} animation="fadeInUp">

@@ -10,17 +10,25 @@ import styles from './indexStyles';
 export default function Login() {
     const navigation = useNavigation(); 
     const [passwordVisible, setPasswordVisible] = useState(false);
+    const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
     const [countryCode, setCountryCode] = useState({ cca2: 'BR', callingCode: ['55'] });
     const [fullName, setFullName] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [loading, setLoading] = useState(false);
+    const [isProvider, setIsProvider] = useState(false);
     const animRef = useRef(null);
 
     const handleLogin = () => {
-        if (!fullName || !email || !phone || !password) {
+        if (!fullName || !email || !phone || !password || !confirmPassword) {
             Alert.alert('Erro', 'Por favor, preencha todos os campos.');
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            Alert.alert('Erro', 'As senhas não coincidem.');
             return;
         }
 
@@ -30,6 +38,13 @@ export default function Login() {
             setTimeout(() => {
                 setLoading(false); 
                 Alert.alert('Cadastro Realizado!', 'Seu cadastro foi realizado com sucesso.');
+
+                if (isProvider) {
+                    Alert.alert('Redirecionando', 'Você será redirecionado para o cadastro de estabelecimento.');
+                    navigation.navigate('EstablishmentRegister'); 
+                } else {
+                    // Adicione aqui qualquer outra ação que você queira realizar se não for provedor
+                }
             }, 2000);
         });
     };
@@ -45,8 +60,8 @@ export default function Login() {
             <View style={styles.containerHeader}>
                 <Text style={styles.message}>CADASTRE-SE</Text>
                 <Text style={[styles.subMessage, styles.neonText]}>
-                    Preencha os campos abaixo para criar sua agenda.
-                    </Text>
+                    Preencha os campos abaixo para realizar seu cadastro!
+                </Text>
             </View>
 
             <Animatable.View ref={animRef} style={styles.containerForm} animation="fadeInUp">
@@ -80,7 +95,21 @@ export default function Login() {
                     setPassword={setPassword}
                 />
 
-                <TouchableOpacity onPress={handleLogin} style={{ marginTop: 20 }}>
+                <ConfirmPasswordField 
+                    confirmPasswordVisible={confirmPasswordVisible}
+                    setConfirmPasswordVisible={setConfirmPasswordVisible}
+                    confirmPassword={confirmPassword}
+                    setConfirmPassword={setConfirmPassword}
+                />
+
+                <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 5 }}>
+                    <TouchableOpacity onPress={() => setIsProvider(!isProvider)} style={{ marginRight: 5 }}>
+                        <Icon name={isProvider ? "checkbox" : "checkbox-outline"} size={20} color="#000" />
+                    </TouchableOpacity>
+                    <Text style={[styles.title, { fontSize: 14, lineHeight: 20 }]}>É um provedor?</Text>
+                </View>
+
+                <TouchableOpacity onPress={handleLogin} style={{ marginTop: 15 }}>
                     <LinearGradient
                         colors={['#0052D4', '#4364F7', '#6FB1FC']} 
                         style={styles.button}
@@ -95,9 +124,11 @@ export default function Login() {
 
                 <TouchableOpacity 
                     style={styles.buttonregister} 
-                    onPress={() => navigation.navigate('Register')} 
+                    onPress={() => navigation.navigate('Login')} 
                 >
-                    {/* <Text style={{ color: '#a1a1a1' }}>Já possui uma conta? Faça login</Text> */}
+                    <Text style={[styles.registerText, { textAlign: 'center', marginTop: 20 }]}>
+                        Já possui uma conta? Faça login
+                    </Text>
                 </TouchableOpacity>
             </Animatable.View>
         </View>
@@ -106,11 +137,11 @@ export default function Login() {
 
 const FormField = ({ label, placeholder, keyboardType, value, onChangeText }) => (
     <>
-        <Text style={styles.title}>{label}</Text>
+        <Text style={[styles.title, { fontSize: 14 }]}>{label}</Text>
         <View style={styles.inputContainer}>
             <TextInput
                 placeholder={placeholder}
-                style={styles.input}
+                style={[styles.input, { height: 40 }]}
                 keyboardType={keyboardType}
                 placeholderTextColor="#999"
                 value={value}
@@ -122,7 +153,7 @@ const FormField = ({ label, placeholder, keyboardType, value, onChangeText }) =>
 
 const PhoneField = ({ countryCode, setCountryCode, phone, setPhone }) => (
     <>
-        <Text style={styles.title}>Seu Telefone</Text>
+        <Text style={[styles.title, { fontSize: 14 }]}>Seu Telefone</Text>
         <View style={styles.inputContainer}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <CountryPicker
@@ -134,7 +165,7 @@ const PhoneField = ({ countryCode, setCountryCode, phone, setPhone }) => (
                 />
                 <TextInput
                     placeholder="Telefone"
-                    style={styles.input}
+                    style={[styles.input, { height: 40 }]}
                     keyboardType="phone-pad"
                     placeholderTextColor="#999"
                     value={phone}
@@ -147,11 +178,11 @@ const PhoneField = ({ countryCode, setCountryCode, phone, setPhone }) => (
 
 const PasswordField = ({ passwordVisible, setPasswordVisible, password, setPassword }) => (
     <>
-        <Text style={styles.title}>Digite sua Senha</Text>
+        <Text style={[styles.title, { fontSize: 14 }]}>Digite sua Senha</Text>
         <View style={{ ...styles.inputContainer, flexDirection: 'row', alignItems: 'center' }}>
             <TextInput
                 placeholder="Digite sua senha..."
-                style={styles.input}
+                style={[styles.input, { height: 40 }]}
                 secureTextEntry={!passwordVisible}
                 placeholderTextColor="#999"
                 value={password}
@@ -159,6 +190,25 @@ const PasswordField = ({ passwordVisible, setPasswordVisible, password, setPassw
             />
             <TouchableOpacity onPress={() => setPasswordVisible(!passwordVisible)} style={styles.eyeIcon}>
                 <Icon name={passwordVisible ? "eye-off" : "eye"} size={20} color="#666" />
+            </TouchableOpacity>
+        </View>
+    </>
+);
+
+const ConfirmPasswordField = ({ confirmPasswordVisible, setConfirmPasswordVisible, confirmPassword, setConfirmPassword }) => (
+    <>
+        <Text style={[styles.title, { fontSize: 14 }]}>Confirme sua Senha</Text>
+        <View style={{ ...styles.inputContainer, flexDirection: 'row', alignItems: 'center' }}>
+            <TextInput
+                placeholder="Confirme sua senha..."
+                style={[styles.input, { height: 40 }]}
+                secureTextEntry={!confirmPasswordVisible}
+                placeholderTextColor="#999"
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
+            />
+            <TouchableOpacity onPress={() => setConfirmPasswordVisible(!confirmPasswordVisible)} style={styles.eyeIcon}>
+                <Icon name={confirmPasswordVisible ? "eye-off" : "eye"} size={20} color="#666" />
             </TouchableOpacity>
         </View>
     </>

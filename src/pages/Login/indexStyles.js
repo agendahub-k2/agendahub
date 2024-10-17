@@ -102,9 +102,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    neonGrayText: {
-        color: '#D3D3D3', 
-        textShadowColor: '#FFFFFF', 
+    neonText: {
+        color: '#FFFFFF', 
+        textShadowColor: '#00FFFF', 
         textShadowOffset: { width: 0, height: 0 },
         textShadowRadius: 10, 
     },

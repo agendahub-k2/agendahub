@@ -1,36 +1,58 @@
 import { StyleSheet } from 'react-native';
 
+
+const colors = {
+    primary: '#005BB5',
+    secondary: '#007ACC',
+    background: '#fff',
+    textLight: '#fff',
+    textDark: '#333',
+    placeholder: '#999',
+    border: '#f0f0f0',
+    registerText: '#a1a1a1',
+};
+
+const sizes = {
+    baseMargin: 10,
+    smallMargin: 5,
+    mediumMargin: 20,
+    largeFontSize: 28,
+    mediumFontSize: 18,
+    smallFontSize: 16,
+};
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#005BB5',
+        backgroundColor: colors.primary,
     },
     containerHeader: {
-        marginBottom: 14,
+        marginBottom: sizes.baseMargin,
         marginTop: '8%',
         paddingStart: '5%',
     },
     message: {
-        fontSize: 28,
+        fontSize: sizes.largeFontSize,
         fontWeight: 'bold',
-        color: '#fff',
+        color: colors.textLight,
     },
     containerForm: {
-        backgroundColor: '#fff',
+        backgroundColor: colors.background,
         flex: 1,
         borderBottomLeftRadius: 30,
         borderTopRightRadius: 30,
         paddingStart: '5%',
         paddingEnd: '5%',
+        paddingBottom: sizes.mediumMargin,
     },
     title: {
-        fontSize: 18,
-        marginTop: 28,
+        fontSize: sizes.mediumFontSize,
+        marginTop: sizes.smallMargin,
     },
     inputContainer: {
-        backgroundColor: '#f0f0f0',
+        backgroundColor: colors.border,
         borderRadius: 10,
-        marginBottom: 15,
+        marginBottom: sizes.baseMargin,
         paddingHorizontal: 9,
         height: 55,
         flexDirection: 'row',
@@ -39,32 +61,35 @@ const styles = StyleSheet.create({
     input: {
         flex: 1,
         height: '100%',
-        fontSize: 16,
-        color: '#333',
+        fontSize: sizes.smallFontSize,
+        color: colors.textDark,
     },
     eyeIcon: {
         paddingHorizontal: 10,
     },
     button: {
-        backgroundColor: '#007ACC',
+        backgroundColor: colors.secondary,
         width: '100%',
         borderRadius: 8,
         paddingVertical: 15,
-        marginTop: 10,
+        marginTop: sizes.baseMargin,
         justifyContent: 'center',
         alignItems: 'center',
     },
     buttonText: {
-        color: '#FFF',
-        fontSize: 18,
+        color: colors.textLight,
+        fontSize: sizes.smallFontSize,
         fontWeight: 'bold',
+        alignItems: 'center',
     },
-    buttonregister: {
-        marginTop: 14,
+    buttonRegister: {
+        marginTop: sizes.baseMargin,
         alignSelf: 'center',
+        marginTop: sizes.mediumMargin,
     },
     registerText: {
-        color: '#a1a1a1',
+        color: colors.registerText,
+        alignItems: 'center',
     },
     header: {
         flexDirection: 'row',
@@ -72,7 +97,7 @@ const styles = StyleSheet.create({
         padding: 16,
     },
     headerTitle: {
-        fontSize: 20,
+        fontSize: sizes.mediumFontSize,
         marginLeft: 16,
         fontWeight: 'bold',
     },
@@ -86,7 +111,7 @@ const styles = StyleSheet.create({
     phoneContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 20,
+        marginBottom: sizes.baseMargin,
     },
     picker: {
         height: 50,
@@ -95,17 +120,16 @@ const styles = StyleSheet.create({
     inputPhone: {
         flex: 1,
         padding: 10,
-        color: '#333',
+        color: colors.textDark,
         textAlign: 'justify',
-        fontSize: 16, 
+        fontSize: sizes.smallFontSize,
     },
     neonText: {
-        color: '#FFFFFF', 
-        textShadowColor: '#00FFFF', 
+        color: colors.textLight,
+        textShadowColor: '#00FFFF',
         textShadowOffset: { width: 0, height: 0 },
-        textShadowRadius: 10, 
+        textShadowRadius: 10,
     },
-    
 });
 
 export default styles;
