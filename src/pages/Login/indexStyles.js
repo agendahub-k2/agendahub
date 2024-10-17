@@ -5,6 +5,11 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#005BB5',
     },
+    header: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 16,
+    },
     containerHeader: {
         marginBottom: 14,
         marginTop: '8%',
@@ -15,13 +20,15 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#fff',
     },
+    subMessage: {
+        color: 'white',
+    },
     containerForm: {
-        backgroundColor: '#fff',
         flex: 1,
+        backgroundColor: '#fff',
         borderBottomLeftRadius: 30,
         borderTopRightRadius: 30,
-        paddingStart: '5%',
-        paddingEnd: '5%',
+        padding: '5%',
     },
     title: {
         fontSize: 20,
@@ -31,16 +38,21 @@ const styles = StyleSheet.create({
         backgroundColor: '#f0f0f0',
         borderRadius: 10,
         marginBottom: 15,
-        paddingHorizontal: 10,
-        height: 50,
+        paddingHorizontal: 9,
+        height: 55,
         flexDirection: 'row',
         alignItems: 'center',
+        borderWidth: 0, 
     },
     input: {
         flex: 1,
         height: '100%',
         fontSize: 16,
         color: '#333',
+        borderWidth: 0, 
+    },
+    inputError: {
+        borderColor: 'red', 
     },
     eyeIcon: {
         paddingHorizontal: 10,
@@ -66,16 +78,22 @@ const styles = StyleSheet.create({
     registerText: {
         color: '#a1a1a1',
     },
-    header: {
+    phoneContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        padding: 16,
     },
-    
-    headerTitle: {
-        fontSize: 20,
-        marginLeft: 16,
-        fontWeight: 'bold',
+    inputPhone: {
+        flex: 1,
+        height: '100%',
+        fontSize: 16,
+        color: '#333',
+        borderColor: '#ccc', 
+        borderWidth: 1,
+        borderRadius: 10,
+        paddingHorizontal: 10,
+    },
+    countryPicker: {
+        marginRight: 10,
     },
     gradientButton: {
         width: '100%',
@@ -83,6 +101,12 @@ const styles = StyleSheet.create({
         paddingVertical: 8,
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    neonGrayText: {
+        color: '#D3D3D3', 
+        textShadowColor: '#FFFFFF', 
+        textShadowOffset: { width: 0, height: 0 },
+        textShadowRadius: 10, 
     },
     
 });

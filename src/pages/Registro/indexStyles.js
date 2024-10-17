@@ -99,6 +99,13 @@ const styles = StyleSheet.create({
         textAlign: 'justify',
         fontSize: 16, 
     },
+    neonText: {
+        color: '#FFFFFF', 
+        textShadowColor: '#00FFFF', 
+        textShadowOffset: { width: 0, height: 0 },
+        textShadowRadius: 10, 
+    },
+    
 });
 
 export default styles;
