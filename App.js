@@ -1,15 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, View } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { StatusBar, ActivityIndicator, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import Login from './src/components/Login';
-import Home from './src/components/Home';
-import Register from './src/components/Register';
-import styles from './src/styles/styles';
-
-const Stack = createStackNavigator();
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Routes from './src/routes';
 
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
@@ -44,7 +37,7 @@ export default function App() {
 
   if (loading) {
     return (
-      <View style={styles.container}>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <ActivityIndicator size="large" color="#007BFF" />
       </View>
     );
@@ -52,11 +45,8 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={isAuthenticated ? 'Home' : 'Login'}>
-        <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Register" component={Register} />
-      </Stack.Navigator>
+      <StatusBar backgroundColor="#005BB5" barStyle="light-content" />
+      <Routes isAuthenticated={isAuthenticated} />
     </NavigationContainer>
   );
 }
