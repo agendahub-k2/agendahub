@@ -130,6 +130,25 @@ const styles = StyleSheet.create({
         textShadowOffset: { width: 0, height: 0 },
         textShadowRadius: 10,
     },
+    alertContainer: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        backgroundColor: '#ff4444',
+        padding: 15,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderBottomLeftRadius: 10,
+        borderBottomRightRadius: 10,
+        elevation: 5,
+        zIndex: 1000,
+    },
+    alertText: {
+        color: '#fff',
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
 });
 
 export default styles;

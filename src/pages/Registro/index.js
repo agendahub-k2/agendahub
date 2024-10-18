@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import CountryPicker from 'react-native-country-picker-modal';
 import { useNavigation } from '@react-navigation/native';
@@ -20,15 +20,21 @@ export default function Login() {
     const [loading, setLoading] = useState(false);
     const [isProvider, setIsProvider] = useState(false);
     const animRef = useRef(null);
+    const [alertVisible, setAlertVisible] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
 
     const handleLogin = () => {
         if (!fullName || !email || !phone || !password || !confirmPassword) {
-            Alert.alert('Erro', 'Por favor, preencha todos os campos.');
+            setAlertMessage('Por favor, preencha todos os campos.');
+            setAlertVisible(true);
+            setTimeout(() => setAlertVisible(false), 3000); // Alerta desaparece após 3 segundos
             return;
         }
 
         if (password !== confirmPassword) {
-            Alert.alert('Erro', 'As senhas não coincidem.');
+            setAlertMessage('As senhas não coincidem.');
+            setAlertVisible(true);
+            setTimeout(() => setAlertVisible(false), 3000); // Alerta desaparece após 3 segundos
             return;
         }
 
@@ -37,20 +43,18 @@ export default function Login() {
         animRef.current.fadeOut(600).then(() => {
             setTimeout(() => {
                 setLoading(false); 
-                Alert.alert('Cadastro Realizado!', 'Seu cadastro foi realizado com sucesso.');
-
-                if (isProvider) {
-                    Alert.alert('Redirecionando', 'Você será redirecionado para o cadastro de estabelecimento.');
-                    navigation.navigate('EstablishmentRegister'); 
-                } else {
-                    // Adicione aqui qualquer outra ação que você queira realizar se não for provedor
-                }
+                navigation.navigate(isProvider ? 'EstabelecimentoRegister' : 'Welcom');
             }, 2000);
         });
     };
 
     return (
         <View style={styles.container}>
+            {alertVisible && (
+                <View style={styles.alertContainer}>
+                    <Text style={styles.alertText}>{alertMessage}</Text>
+                </View>
+            )}
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Icon name="arrow-back" size={24} color="#000" />

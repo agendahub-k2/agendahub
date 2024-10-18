@@ -1,11 +1,10 @@
 import React, { useRef, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import * as Animatable from 'react-native-animatable';
-import styles from './indexStyles';
-
+import styles from './indexStyles'; // Certifique-se de que o caminho esteja correto
 
 export default function Login() {
     const navigation = useNavigation(); 
@@ -13,11 +12,13 @@ export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
+    const [showAlert, setShowAlert] = useState(false); // Estado para controlar o alerta
+    const [alertMessage, setAlertMessage] = useState(''); // Mensagem do alerta
     const animRef = useRef(null);
 
     const handleLogin = () => {
         if (!email || !password) {
-            Alert.alert('Erro', 'Por favor, preencha todos os campos.');
+            showAlertMessage('Por favor, preencha todos os campos.');
             return;
         }
 
@@ -26,13 +27,25 @@ export default function Login() {
         animRef.current.fadeOut(600).then(() => {
             setTimeout(() => {
                 setLoading(false); 
-                Alert.alert('Login Realizado!', 'Você foi logado com sucesso.');
+                showAlertMessage('Login Realizado! Você foi logado com sucesso.');
             }, 2000);
         });
     };
 
+    const showAlertMessage = (message) => {
+        setAlertMessage(message);
+        setShowAlert(true);
+        setTimeout(() => setShowAlert(false), 3000); // O alerta desaparece após 3 segundos
+    };
+
     return (
         <View style={styles.container}>
+            {showAlert && (
+                <View style={styles.alertContainer}>
+                    <Text style={styles.alertText}>{alertMessage}</Text>
+                </View>
+            )}
+            
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Icon name="arrow-back" size={24} color="#000" />
@@ -100,7 +113,7 @@ const FormField = ({ label, placeholder, keyboardType, value, onChangeText }) =>
     </>
 );
 
-const PasswordField = ({ passwordVisible, setPasswordVisible, password, setPassword }) => (
+const PasswordField = ({ passwordVisible = false, setPasswordVisible, password, setPassword }) => (
     <>
         <Text style={styles.title}>Digite sua Senha</Text>
         <View style={styles.inputContainer}>
