@@ -5,9 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import * as Animatable from 'react-native-animatable';
 import styles from './indexStyles';
-import { Picker } from '@react-native-picker/picker';
 import axios from 'axios';
-import CountryPicker from 'react-native-country-picker-modal';
 
 const EstablishmentRegister = () => {
     const navigation = useNavigation();
@@ -138,13 +136,7 @@ const EstablishmentRegister = () => {
                     </View>
 
                     <View style={styles.inputContainer}>
-                        <CountryPicker
-                            countryCode="BR"
-                            withFlag
-                            withCountryNameButton={false}
-                            withFilter={false}
-                            containerButtonStyle={{ width: 40, height: 40 }} 
-                        />
+                    
                         <TextInput
                             placeholder="Digite o telefone..."
                             style={[styles.input, { height: 40, marginLeft: 10, flex: 1 }]}
@@ -164,54 +156,6 @@ const EstablishmentRegister = () => {
 
                     <Text style={[styles.title, { fontSize: 14 }]}>Tipo de Estabelecimento</Text>
                     <View style={styles.inputContainer}>
-                        <Picker
-                            selectedValue={formData.establishmentType}
-                            style={styles.picker}
-                            onValueChange={(itemValue) => handleChange('establishmentType', itemValue)}
-                        >
-                            <Picker.Item label="Selecione uma categoria" value="" />
-                            <Picker.Item label="Salão de Beleza" value="Salao De Beleza" />
-                            <Picker.Item label="Barbearia" value="Barbearia" />
-                            <Picker.Item label="Clínica de Estética" value="Clinica de Estetica" />
-                            <Picker.Item label="Consultório Médico" value="Consultorio Medico" />
-                            <Picker.Item label="Academia" value="Academia" />
-                            <Picker.Item label="Estúdio de Tatuagem" value="Estudio de Tatuagem" />
-                            <Picker.Item label="Centro de Fisioterapia" value="Centro de Fisioterapia" />
-                            <Picker.Item label="Espaço de Yoga" value="Espaco de Yoga" />
-                            <Picker.Item label="Estúdio de Pilates" value="Estudio de Pilates" />
-                            <Picker.Item label="Clínica de Fisioterapia" value="Clinica de Fisioterapia" />
-                            <Picker.Item label="Clínica de Psicologia" value="Clinica de Psicologia" />
-                            <Picker.Item label="Consultório Odontológico" value="Consultorio Odontologico" />
-                            <Picker.Item label="Estúdio de Maquiagem" value="Estudio de Maquiagem" />
-                            <Picker.Item label="Spa" value="Spa" />
-                            <Picker.Item label="Pet Shop" value="Pet Shop" />
-                            <Picker.Item label="Estúdio de Fotografia" value="Estudio de Fotografia" />
-                            <Picker.Item label="Cabeleireiro" value="Cabeleireiro" />
-                            <Picker.Item label="Clínica de Dermatologia" value="Clinica de Dermatologia" />
-                            <Picker.Item label="Consultório de Nutrição" value="Consultorio de Nutrição" />
-                            <Picker.Item label="Clínica de Reabilitação" value="Clinica de Reabilitação" />
-                            <Picker.Item label="Consultório de Psiquiatria" value="Consultorio de Psiquiatria" />
-                            <Picker.Item label="Estúdio de Design de Sobrancelhas" value="Estudio de Design de Sobrancelhas" />
-                            <Picker.Item label="Estúdio de Cabelo" value="Estudio de Cabelo" />
-                            <Picker.Item label="Instituto de Beleza" value="Instituto de Beleza" />
-                            <Picker.Item label="Clínica de Acupuntura" value="Clinica de Acupuntura" />
-                            <Picker.Item label="Clínica de Odontopediatria" value="Clinica de Odontopediatria" />
-                            <Picker.Item label="Estúdio de Massagem" value="Estudio de Massagem" />
-                            <Picker.Item label="Consultório de Ginecologia" value="Consultorio de Ginecologia" />
-                            <Picker.Item label="Consultório de Oftalmologia" value="Consultorio de Oftalmologia" />
-                            <Picker.Item label="Estúdio de Canto" value="Estudio de Canto" />
-                            <Picker.Item label="Estúdio de Dança" value="Estudio de Dança" />
-                            <Picker.Item label="Escola de Música" value="Escola de Música" />
-                            <Picker.Item label="Consultório de Endocrinologia" value="Consultorio de Endocrinologia" />
-                            <Picker.Item label="Estúdio de Artesanato" value="Estudio de Artesanato" />
-                            <Picker.Item label="Consultório de Cardiologia" value="Consultorio de Cardiologia" />
-                            <Picker.Item label="Escola de Idiomas" value="Escola de Idiomas" />
-                            <Picker.Item label="Consultório de Dermatologia Estética" value="Consultorio de Dermatologia Estetica" />
-                            <Picker.Item label="Estúdio de Decoração" value="Estudio de Decoração" />
-                            <Picker.Item label="Consultório de Reumatologia" value="Consultorio de Reumatologia" />
-                            <Picker.Item label="Clínica de Geriatria" value="Clinica de Geriatria" />
-                            <Picker.Item label="Estúdio de Cosmetologia" value="Estudio de Cosmetologia" />
-                        </Picker>
                         <TextInput
                             value={formData.establishmentType}
                             editable={false} 

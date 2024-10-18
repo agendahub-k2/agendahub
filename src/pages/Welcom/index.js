@@ -31,7 +31,7 @@ export default function Welcome() {
             <View style={styles.containerLogo}>
                 <Animatable.Image
                     animation="flipInY"
-                    source={require('../../assets/Logo.png')}
+                    source={require('../../../assets/Logo.png')}
                     style={styles.logo}
                     resizeMode="contain"
                 />
