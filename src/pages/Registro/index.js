@@ -21,7 +21,7 @@ export default function Login() {
     const [alertVisible, setAlertVisible] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
         if (!fullName || !email || !phone || !password || !confirmPassword) {
             triggerAlert('Por favor, preencha todos os campos.');
             return;
@@ -34,12 +34,38 @@ export default function Login() {
 
         setLoading(true); 
 
-        animRef.current.fadeOut(600).then(() => {
-            setTimeout(() => {
-                setLoading(false); 
+        // Cria o objeto de dados a ser enviado
+        const userData = {
+            name: fullName,
+            email: email,
+            password: password,
+            userType: isProvider ? "PROVEDOR" : "SOLICITANTE",
+            telefone: phone,
+        };
+
+        try {
+            const response = await fetch('http://localhost:8080/user/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userData),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                // Se a resposta for bem-sucedida, navegue para a próxima tela
                 navigation.navigate(isProvider ? 'EstabelecimentoRegister' : 'Welcom');
-            }, 2000);
-        });
+            } else {
+                // Se a resposta não for bem-sucedida, mostre a mensagem de erro
+                triggerAlert(data.message || 'Erro ao criar usuário. Tente novamente.');
+            }
+        } catch (error) {
+            triggerAlert('Erro ao conectar com o servidor. Tente novamente.');
+        } finally {
+            setLoading(false); 
+        }
     };
 
     const triggerAlert = (message) => {

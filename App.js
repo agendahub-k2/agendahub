@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { StatusBar, ActivityIndicator, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Routes from './src/routes';
+import Routes from './src/routes/router';
+import Home from './src/pages/Home/Home';
 
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
@@ -12,6 +13,7 @@ export default function App() {
     const checkAuthentication = async () => {
       try {
         const token = await AsyncStorage.getItem('userToken');
+        
         if (token) {
           const response = await fetch('http://localhost:8080/user/authenticate', {
             method: 'GET',

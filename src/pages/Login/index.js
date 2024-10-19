@@ -4,7 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import * as Animatable from 'react-native-animatable';
-import styles from './indexStyles'; // Certifique-se de que o caminho esteja correto
+import styles from './indexStyles';
 
 export default function Login() {
     const navigation = useNavigation(); 
@@ -12,8 +12,8 @@ export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
-    const [showAlert, setShowAlert] = useState(false); // Estado para controlar o alerta
-    const [alertMessage, setAlertMessage] = useState(''); // Mensagem do alerta
+    const [showAlert, setShowAlert] = useState(false); 
+    const [alertMessage, setAlertMessage] = useState(''); 
     const animRef = useRef(null);
 
     const handleLogin = () => {
@@ -28,6 +28,9 @@ export default function Login() {
             setTimeout(() => {
                 setLoading(false); 
                 showAlertMessage('Login Realizado! Você foi logado com sucesso.');
+                
+                // Redireciona para a tela inicial (home)
+                navigation.navigate('Home');
             }, 2000);
         });
     };
@@ -35,7 +38,7 @@ export default function Login() {
     const showAlertMessage = (message) => {
         setAlertMessage(message);
         setShowAlert(true);
-        setTimeout(() => setShowAlert(false), 3000); // O alerta desaparece após 3 segundos
+        setTimeout(() => setShowAlert(false), 3000);
     };
 
     return (
