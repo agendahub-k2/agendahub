@@ -148,7 +148,12 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontWeight: 'bold',
         textAlign: 'center',
+        
     },
+    alertContainer: {
+        backgroundColor: 'green', 
+    }
+    
 });
 
 export default styles;

@@ -4,7 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import * as Animatable from 'react-native-animatable';
-import styles from './indexStyles';
+import styles from './indexStyles'; // Estilos do componente
 
 export default function Login() {
     const navigation = useNavigation(); 
@@ -16,37 +16,44 @@ export default function Login() {
     const [alertMessage, setAlertMessage] = useState(''); 
     const animRef = useRef(null);
 
-    const handleLogin = () => {
+    // Função de tratamento de login
+    const handleLoginPress = () => {
         if (!email || !password) {
-            showAlertMessage('Por favor, preencha todos os campos.');
+            showAlertMessage('Por favor, preencha todos os campos.', 'error');
             return;
         }
 
         setLoading(true); 
 
-        animRef.current.fadeOut(600).then(() => {
+        // Simulação de autenticação
+        setTimeout(() => {
+            setLoading(false); 
+            showAlertMessage('Você foi logado com sucesso!', 'success');
+
+            // Redireciona para a tela Home após 3 segundos (tempo do alerta)
             setTimeout(() => {
-                setLoading(false); 
-                showAlertMessage('Login Realizado! Você foi logado com sucesso.');
-                
-                // Redireciona para a tela inicial (home)
-                navigation.navigate('Home');
-            }, 2000);
-        });
+                navigation.navigate('Home'); 
+            }, 3000);
+        }, 2000);
     };
 
-    const showAlertMessage = (message) => {
+    // Função para exibir alertas de erro ou sucesso com cores diferentes
+    const showAlertMessage = (message, type) => {
         setAlertMessage(message);
-        setShowAlert(true);
+        setShowAlert(type); // 'success' ou 'error'
         setTimeout(() => setShowAlert(false), 3000);
     };
 
     return (
         <View style={styles.container}>
             {showAlert && (
-                <View style={styles.alertContainer}>
+                <Animatable.View 
+                    style={[styles.alertContainer, showAlert === 'success' ? styles.successAlert : styles.errorAlert]}
+                    animation="slideInDown" // Animação de queda
+                    duration={700} // Duração da animação
+                >
                     <Text style={styles.alertText}>{alertMessage}</Text>
-                </View>
+                </Animatable.View>
             )}
             
             <View style={styles.header}>
@@ -76,7 +83,7 @@ export default function Login() {
                     setPassword={setPassword}
                 />
 
-                <TouchableOpacity onPress={handleLogin} style={{ marginTop: 20 }}>
+                <TouchableOpacity onPress={handleLoginPress} style={{ marginTop: 20 }}>
                     <LinearGradient
                         colors={['#0052D4', '#4364F7', '#6FB1FC']} 
                         style={styles.button}
@@ -93,13 +100,16 @@ export default function Login() {
                     style={styles.buttonregister} 
                     onPress={() => navigation.navigate('Register')} 
                 >
-                    <Text style={styles.neonGrayText}>Não possui uma conta? Cadastre-se</Text>
+                 <Text style={[styles.registerText, { textAlign: 'center', marginTop: 20 }]}>
+                        Não possui uma conta? <Text style={{ color: 'blue' }}>Cadastre-se</Text>
+                    </Text>
                 </TouchableOpacity>
             </Animatable.View>
         </View>
     );
 }
 
+// Campos de formulário
 const FormField = ({ label, placeholder, keyboardType, value, onChangeText }) => (
     <>
         <Text style={styles.title}>{label}</Text>

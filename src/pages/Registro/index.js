@@ -4,7 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import * as Animatable from 'react-native-animatable';
-import styles from './indexStyles'; 
+import styles from './indexStyles'; // Arquivo de estilos
 
 export default function Login() {
     const navigation = useNavigation(); 
@@ -21,12 +21,14 @@ export default function Login() {
     const [alertVisible, setAlertVisible] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
 
-    const handleLogin = async () => {
+    const handleNext = async () => {
+        // Verifica se todos os campos obrigatórios estão preenchidos
         if (!fullName || !email || !phone || !password || !confirmPassword) {
             triggerAlert('Por favor, preencha todos os campos.');
             return;
         }
 
+        // Verifica se as senhas coincidem
         if (password !== confirmPassword) {
             triggerAlert('As senhas não coincidem.');
             return;
@@ -34,7 +36,6 @@ export default function Login() {
 
         setLoading(true); 
 
-        // Cria o objeto de dados a ser enviado
         const userData = {
             name: fullName,
             email: email,
@@ -44,24 +45,34 @@ export default function Login() {
         };
 
         try {
-            const response = await fetch('http://localhost:8080/user/create', {
+            const response = await fetch('http://192.168.1.100:8080/user/create', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(userData),
             });
 
             const data = await response.json();
+            console.log('Resposta da API:', response.ok, data);
 
             if (response.ok) {
-                // Se a resposta for bem-sucedida, navegue para a próxima tela
-                navigation.navigate(isProvider ? 'EstabelecimentoRegister' : 'Welcom');
+                triggerAlert('Cadastro realizado com sucesso!');
+
+                // Se for um provedor, navegue para o cadastro de estabelecimento
+                if (isProvider) {
+                    navigation.navigate('EstabelecimentoRegister'); // Navega para o cadastro de estabelecimento
+                } else {
+                    navigation.navigate('Login'); // Navega para a tela de login
+                }
             } else {
-                // Se a resposta não for bem-sucedida, mostre a mensagem de erro
-                triggerAlert(data.message || 'Erro ao criar usuário. Tente novamente.');
+                // Tratamento para erro de usuário já existente
+                if (data.error && data.error.code === 'USER_ALREADY_EXISTS') {
+                    triggerAlert('Este e-mail já está cadastrado. Tente outro.');
+                } else {
+                    triggerAlert(data.message || 'Erro ao criar usuário. Tente novamente.');
+                }
             }
         } catch (error) {
+            console.log('Erro ao conectar com o servidor:', error);
             triggerAlert('Erro ao conectar com o servidor. Tente novamente.');
         } finally {
             setLoading(false); 
@@ -81,6 +92,7 @@ export default function Login() {
                     <Text style={styles.alertText}>{alertMessage}</Text>
                 </Animatable.View>
             )}
+
             <Header navigation={navigation} />
 
             <View style={styles.containerHeader}>
@@ -135,7 +147,7 @@ export default function Login() {
                     <Text style={[styles.title, { fontSize: 14, lineHeight: 20 }]}>É um provedor?</Text>
                 </View>
 
-                <TouchableOpacity onPress={handleLogin} style={styles.submitButtonContainer}>
+                <TouchableOpacity onPress={handleNext} style={styles.submitButtonContainer}>
                     <LinearGradient
                         colors={['#0052D4', '#4364F7', '#6FB1FC']} 
                         style={styles.button}
@@ -143,7 +155,7 @@ export default function Login() {
                         {loading ? (
                             <ActivityIndicator size="small" color="#FFF" />
                         ) : (
-                            <Text style={styles.buttonText}>Cadastrar</Text>
+                            <Text style={styles.buttonText}>REALIZAR CADASTRO</Text>
                         )}
                     </LinearGradient>
                 </TouchableOpacity>
@@ -189,17 +201,14 @@ const PhoneField = ({ phone, setPhone }) => (
     <>
         <Text style={[styles.title, { fontSize: 14 }]}>Seu Telefone</Text>
         <View style={styles.inputContainer}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Text style={{ marginRight: 8 }}>+55</Text> {/* Código do Brasil */}
-                <TextInput
-                    placeholder="Telefone"
-                    style={[styles.input, { height: 40, flex: 1 }]}
-                    keyboardType="phone-pad"
-                    placeholderTextColor="#999"
-                    value={phone}
-                    onChangeText={setPhone}
-                />
-            </View>
+            <TextInput
+                placeholder="Digite seu telefone..."
+                style={[styles.input, { height: 40 }]}
+                keyboardType="phone-pad"
+                placeholderTextColor="#999"
+                value={phone}
+                onChangeText={setPhone}
+            />
         </View>
     </>
 );
@@ -207,7 +216,7 @@ const PhoneField = ({ phone, setPhone }) => (
 const PasswordField = ({ label, passwordVisible, setPasswordVisible, password, setPassword }) => (
     <>
         <Text style={[styles.title, { fontSize: 14 }]}>{label}</Text>
-        <View style={{ ...styles.inputContainer, flexDirection: 'row', alignItems: 'center' }}>
+        <View style={styles.inputContainer}>
             <TextInput
                 placeholder="Digite sua senha..."
                 style={[styles.input, { height: 40 }]}
@@ -216,8 +225,8 @@ const PasswordField = ({ label, passwordVisible, setPasswordVisible, password, s
                 value={password}
                 onChangeText={setPassword}
             />
-            <TouchableOpacity onPress={() => setPasswordVisible(!passwordVisible)} style={styles.eyeIcon}>
-                <Icon name={passwordVisible ? "eye-off" : "eye"} size={20} color="#666" />
+            <TouchableOpacity onPress={() => setPasswordVisible(!passwordVisible)}>
+                <Icon name={passwordVisible ? "eye-off" : "eye"} size={24} color="#000" />
             </TouchableOpacity>
         </View>
     </>

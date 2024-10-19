@@ -4,6 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import * as Animatable from 'react-native-animatable';
+import { Picker } from '@react-native-picker/picker'; // Importa o Picker
 import styles from './indexStyles';
 import axios from 'axios';
 
@@ -74,6 +75,9 @@ const EstablishmentRegister = () => {
 
     const formatCNPJ = (value) => {
         value = value.replace(/\D/g, '');
+        if (value.length > 14) {
+            value = value.slice(0, 14); // Limita a 14 caracteres
+        }
         if (value.length > 12) {
             return value.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
         } else if (value.length > 8) {
@@ -120,7 +124,6 @@ const EstablishmentRegister = () => {
 
                     <View style={styles.addressContainer}>
                         <FormField 
-                            // label="" 
                             placeholder="Confirmar Endereço..." 
                             value={formData.address}
                             editable={false}
@@ -130,13 +133,12 @@ const EstablishmentRegister = () => {
                             label="N°" 
                             placeholder="N°" 
                             value={formData.houseNumber}
-                            onChangeText={(value) => handleChange('houseNumber', value)}
+                            onChangeText={(value) => handleChange('houseNumber', value.replace(/[^0-9]/g, ''))} // Permite apenas números
                             style={{ width: 80 }} 
                         />
                     </View>
 
                     <View style={styles.inputContainer}>
-                    
                         <TextInput
                             placeholder="Digite o telefone..."
                             style={[styles.input, { height: 40, marginLeft: 10, flex: 1 }]}
@@ -156,13 +158,43 @@ const EstablishmentRegister = () => {
 
                     <Text style={[styles.title, { fontSize: 14 }]}>Tipo de Estabelecimento</Text>
                     <View style={styles.inputContainer}>
-                        <TextInput
-                            value={formData.establishmentType}
-                            editable={false} 
-                            style={[styles.input, { height: 40, marginTop: 10 }]}  
-                            placeholder="Tipo selecionado"
-                            placeholderTextColor="#999"
-                        />
+                        <Picker
+                            selectedValue={formData.establishmentType}
+                            onValueChange={(itemValue) => handleChange('establishmentType', itemValue)}
+                            style={[styles.input, { height: 40, marginTop: 10 }]}
+                        >
+                            <Picker.Item label="Selecione o tipo de estabelecimento" value="" />
+                            <Picker.Item label="Consultório Médico" value="Consultório Médico" />
+                            <Picker.Item label="Consultório Odontológico" value="Consultório Odontológico" />
+                            <Picker.Item label="Clínica de Fisioterapia" value="Clínica de Fisioterapia" />
+                            <Picker.Item label="Academia" value="Academia" />
+                            <Picker.Item label="Estética" value="Estética" />
+                            <Picker.Item label="Spa" value="Spa" />
+                            <Picker.Item label="Salão de Beleza" value="Salão de Beleza" />
+                            <Picker.Item label="Barbearia" value="Barbearia" />
+                            <Picker.Item label="Estúdio de Massagem" value="Estúdio de Massagem" />
+                            <Picker.Item label="Escola de Dança" value="Escola de Dança" />
+                            <Picker.Item label="Escola de Música" value="Escola de Música" />
+                            <Picker.Item label="Curso de Idiomas" value="Curso de Idiomas" />
+                            <Picker.Item label="Centro de Estética" value="Centro de Estética" />
+                            <Picker.Item label="Studio de Fotografia" value="Studio de Fotografia" />
+                            <Picker.Item label="Agendamento de Eventos" value="Agendamento de Eventos" />
+                            <Picker.Item label="Oficina Mecânica" value="Oficina Mecânica" />
+                            <Picker.Item label="Estação de Lavagem de Veículos" value="Estação de Lavagem de Veículos" />
+                            <Picker.Item label="Consultoria de Moda" value="Consultoria de Moda" />
+                            <Picker.Item label="Restaurante" value="Restaurante" />
+                            <Picker.Item label="Pizzaria" value="Pizzaria" />
+                            <Picker.Item label="Confeitaria" value="Confeitaria" />
+                            <Picker.Item label="Clínica Veterinária" value="Clínica Veterinária" />
+                            <Picker.Item label="Estúdio de Artes" value="Estúdio de Artes" />
+                            <Picker.Item label="Aulas de Yoga" value="Aulas de Yoga" />
+                            <Picker.Item label="Aulas de Pilates" value="Aulas de Pilates" />
+                            <Picker.Item label="Consultoria de Viagem" value="Consultoria de Viagem" />
+                            <Picker.Item label="Centro de Reabilitação" value="Centro de Reabilitação" />
+                            <Picker.Item label="Locadora de Veículos" value="Locadora de Veículos" />
+                            <Picker.Item label="Bar" value="Bar" />
+                            <Picker.Item label="Casa de Eventos" value="Casa de Eventos" />
+                        </Picker>
                     </View>
 
                     <FormField 

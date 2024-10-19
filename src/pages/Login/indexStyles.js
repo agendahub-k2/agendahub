@@ -42,17 +42,17 @@ const styles = StyleSheet.create({
         height: 55,
         flexDirection: 'row',
         alignItems: 'center',
-        borderWidth: 0, 
+        borderWidth: 0,
     },
     input: {
         flex: 1,
         height: '100%',
         fontSize: 16,
         color: '#333',
-        borderWidth: 0, 
+        borderWidth: 0,
     },
     inputError: {
-        borderColor: 'red', 
+        borderColor: 'red',
     },
     eyeIcon: {
         paddingHorizontal: 10,
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
         height: '100%',
         fontSize: 16,
         color: '#333',
-        borderColor: '#ccc', 
+        borderColor: '#ccc',
         borderWidth: 1,
         borderRadius: 10,
         paddingHorizontal: 10,
@@ -103,31 +103,31 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     neonText: {
-        color: '#FFFFFF', 
-        textShadowColor: '#00FFFF', 
+        color: '#FFFFFF',
+        textShadowColor: '#00FFFF',
         textShadowOffset: { width: 0, height: 0 },
-        textShadowRadius: 10, 
+        textShadowRadius: 10,
     },
     alertContainer: {
         position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        backgroundColor: '#ff4444',
-        padding: 15,
+        top: 50,
+        left: 20,
+        right: 20,
+        zIndex: 10,
+        padding: 10,
+        borderRadius: 8,
         alignItems: 'center',
-        justifyContent: 'center',
-        borderBottomLeftRadius: 10,
-        borderBottomRightRadius: 10,
-        elevation: 5,
-        zIndex: 1000,
+    },
+    successAlert: {
+        backgroundColor: '#4CAF50', // Verde para sucesso
+    },
+    errorAlert: {
+        backgroundColor: '#f44336', // Vermelho para erro
     },
     alertText: {
         color: '#fff',
-        fontWeight: 'bold',
-        textAlign: 'center',
+        fontSize: 16,
     },
-    
 });
 
 export default styles;

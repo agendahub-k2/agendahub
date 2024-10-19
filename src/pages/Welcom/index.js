@@ -10,18 +10,15 @@ export default function Welcome() {
     const animRef = useRef(null);
 
     const handleNavigation = (screen) => {
-        if (screen !== 'Welcome') {
-            animRef.current.fadeOut(600).then(() => {
-                navigation.navigate(screen);
-            });
-        } else {
-            navigation.navigate(screen); 
-        }
+        // Faz o fadeOut e navega para a tela especificada
+        animRef.current.fadeOut(600).then(() => {
+            navigation.navigate(screen);
+        });
     };
 
     useFocusEffect(
         React.useCallback(() => {
-            
+            // Animação de fadeIn quando a tela é focada
             animRef.current.fadeIn();
         }, [])
     );
@@ -68,7 +65,7 @@ export default function Welcome() {
                         <TouchableOpacity 
                             onPress={() => handleNavigation('Register')}
                         >
-                            <Text style={styles.buttonText}>CADASTRAR</Text>
+                            <Text style={styles.buttonText}>CADASTRE-SE</Text>
                         </TouchableOpacity>
                     </LinearGradient>
                 </View>

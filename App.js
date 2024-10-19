@@ -3,7 +3,7 @@ import { StatusBar, ActivityIndicator, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Routes from './src/routes/router';
-import Home from './src/pages/Home/Home';
+import Home from './src/pages/Home/index';
 
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
