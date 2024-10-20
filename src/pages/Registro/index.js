@@ -7,7 +7,7 @@ import * as Animatable from 'react-native-animatable';
 import styles from './indexStyles'; // Arquivo de estilos
 
 export default function Login() {
-    const navigation = useNavigation(); 
+    const navigation = useNavigation();
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
     const [fullName, setFullName] = useState('');
@@ -20,6 +20,14 @@ export default function Login() {
     const animRef = useRef(null);
     const [alertVisible, setAlertVisible] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
+
+    function limparForm() {
+        setEmail('');
+        setFullName('');
+        setPassword('');
+        setConfirmPassword('');
+        setPhone('');
+    }
 
     const handleNext = async () => {
         // Verifica se todos os campos obrigatórios estão preenchidos
@@ -34,55 +42,68 @@ export default function Login() {
             return;
         }
 
-        setLoading(true); 
+        setLoading(true);
 
         const userData = {
             name: fullName,
             email: email,
             password: password,
             userType: isProvider ? "PROVEDOR" : "SOLICITANTE",
-            telefone: phone,
+            phone: phone,
         };
 
         try {
-            const response = await fetch('http://localhost:8080/user/create', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(userData),
-            });
 
-            const data = await response.json();
-            console.log('Resposta da API:', response.ok, data);
-
-            if (response.ok) {
-                triggerAlert('Cadastro realizado com sucesso!');
-
-                // Se for um provedor, navegue para o cadastro de estabelecimento
-                if (isProvider) {
-                    navigation.navigate('EstabelecimentoRegister'); // Navega para o cadastro de estabelecimento
-                } else {
+            if (isProvider) {
+                navigation.navigate('EstabelecimentoRegister'); // Navega para o cadastro de estabelecimento
+            }else{
+                const response = await fetch('http://localhost:8080/user/create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(userData),
+                });
+    
+                const data = await response.json();
+                if (response.ok) {
+                    console.log('Resposta da API:', response.ok, data);
+                    triggerAlert('Cadastro realizado com sucesso!');
+                    limparForm();
+    
                     navigation.navigate('Login'); // Navega para a tela de login
-                }
-            } else {
-                // Tratamento para erro de usuário já existente
-                if (data.error && data.error.code === 'USER_ALREADY_EXISTS') {
-                    triggerAlert('Este e-mail já está cadastrado. Tente outro.');
+    
                 } else {
-                    triggerAlert(data.message || 'Erro ao criar usuário. Tente novamente.');
+                    console.log('Resposta da API:', data);
+                    if (data.message === "Validation failed") {
+                        // Percorre o array de erros
+                        data.errors.forEach(error => {
+                            // Verifica o campo que causou o erro
+                            if (error.field === "phone") {
+                                triggerAlert('O campo de telefone não pode estar vazio.');
+                            } else if (error.field === "password") {
+                                triggerAlert('A senha deve ter entre 6 e 255 caracteres.');
+                            }
+                            else if (error.field === "name") {
+                                triggerAlert('Nome deve ter entre 6 e 255 caracteres.');
+                            }
+                            else if (error.field === "email") {
+                                triggerAlert('E-mail não é válido.');
+                            }
+                        });
+                    }
                 }
             }
         } catch (error) {
             console.log('Erro ao conectar com o servidor:', error);
             triggerAlert('Erro ao conectar com o servidor. Tente novamente.');
         } finally {
-            setLoading(false); 
+            setLoading(false);
         }
     };
 
     const triggerAlert = (message) => {
         setAlertMessage(message);
         setAlertVisible(true);
-        setTimeout(() => setAlertVisible(false), 3000);
+        setTimeout(() => setAlertVisible(false), 5000);
     };
 
     return (
@@ -103,39 +124,39 @@ export default function Login() {
             </View>
 
             <Animatable.View ref={animRef} style={styles.containerForm} animation="fadeInUp">
-                <FormField 
-                    label="Seu Nome Completo" 
-                    placeholder="Digite seu nome completo..." 
-                    keyboardType="default" 
+                <FormField
+                    label="Seu Nome Completo"
+                    placeholder="Digite seu nome completo..."
+                    keyboardType="default"
                     value={fullName}
                     onChangeText={setFullName}
                 />
 
-                <PhoneField 
+                <PhoneField
                     phone={phone}
                     setPhone={setPhone}
                 />
 
-                <FormField 
-                    label="Seu E-mail" 
-                    placeholder="Digite seu E-mail..." 
-                    keyboardType="email-address" 
+                <FormField
+                    label="Seu E-mail"
+                    placeholder="Digite seu E-mail..."
+                    keyboardType="email-address"
                     value={email}
                     onChangeText={setEmail}
                 />
 
-                <PasswordField 
-                    label="Digite sua Senha" 
-                    passwordVisible={passwordVisible} 
-                    setPasswordVisible={setPasswordVisible} 
+                <PasswordField
+                    label="Digite sua Senha"
+                    passwordVisible={passwordVisible}
+                    setPasswordVisible={setPasswordVisible}
                     password={password}
                     setPassword={setPassword}
                 />
 
-                <PasswordField 
-                    label="Confirme sua Senha" 
-                    passwordVisible={confirmPasswordVisible} 
-                    setPasswordVisible={setConfirmPasswordVisible} 
+                <PasswordField
+                    label="Confirme sua Senha"
+                    passwordVisible={confirmPasswordVisible}
+                    setPasswordVisible={setConfirmPasswordVisible}
                     password={confirmPassword}
                     setPassword={setConfirmPassword}
                 />
@@ -149,7 +170,7 @@ export default function Login() {
 
                 <TouchableOpacity onPress={handleNext} style={styles.submitButtonContainer}>
                     <LinearGradient
-                        colors={['#0052D4', '#4364F7', '#6FB1FC']} 
+                        colors={['#0052D4', '#4364F7', '#6FB1FC']}
                         style={styles.button}
                     >
                         {loading ? (
@@ -160,9 +181,9 @@ export default function Login() {
                     </LinearGradient>
                 </TouchableOpacity>
 
-                <TouchableOpacity 
-                    style={styles.buttonregister} 
-                    onPress={() => navigation.navigate('Login')} 
+                <TouchableOpacity
+                    style={styles.buttonregister}
+                    onPress={() => navigation.navigate('Login')}
                 >
                     <Text style={[styles.registerText, { textAlign: 'center', marginTop: 20 }]}>
                         Já possui uma conta? <Text style={{ color: 'blue' }}>Faça login</Text>
