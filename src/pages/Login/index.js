@@ -69,7 +69,7 @@ export default function Login() {
 
             <Animatable.View ref={animRef} style={styles.containerForm} animation="fadeInUp">
                 <FormField 
-                    label="Seu E-mail" 
+                    label="E-mail" 
                     placeholder="Digite seu E-mail..." 
                     keyboardType="email-address" 
                     value={email}
@@ -128,7 +128,7 @@ const FormField = ({ label, placeholder, keyboardType, value, onChangeText }) =>
 
 const PasswordField = ({ passwordVisible = false, setPasswordVisible, password, setPassword }) => (
     <>
-        <Text style={styles.title}>Digite sua Senha</Text>
+        <Text style={styles.title}>Senha</Text>
         <View style={styles.inputContainer}>
             <TextInput
                 placeholder="Digite sua senha..."

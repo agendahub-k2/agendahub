@@ -22,6 +22,7 @@ export default function App() {
             },
           });
 
+          console.log("logado "+ token)
           setIsAuthenticated(response.ok);
         } else {
           setIsAuthenticated(false);

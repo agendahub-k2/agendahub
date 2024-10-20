@@ -108,8 +108,8 @@ const EstablishmentRegister = () => {
             <ScrollView style={styles.containerForm} keyboardShouldPersistTaps="handled">
                 <Animatable.View ref={animRef} animation="fadeInUp">
                     <FormField 
-                        label="Nome do Estabelecimento" 
-                        placeholder="Digite o nome do estabelecimento..." 
+                        label="Nome do Provedor" 
+                        placeholder="Digite o nome do provedor da agenda..." 
                         value={formData.establishmentName}
                         onChangeText={(value) => handleChange('establishmentName', value)}
                     />
@@ -156,7 +156,7 @@ const EstablishmentRegister = () => {
                         onChangeText={(value) => handleChange('email', value)}
                     />
 
-                    <Text style={[styles.title, { fontSize: 14 }]}>Tipo de Estabelecimento</Text>
+                    <Text style={[styles.title, { fontSize: 14 }]}>Tipo de provedor</Text>
                     <View style={styles.inputContainer}>
                         <Picker
                             selectedValue={formData.establishmentType}
@@ -213,7 +213,7 @@ const EstablishmentRegister = () => {
                             {loading ? (
                                 <ActivityIndicator size="small" color="#FFF" />
                             ) : (
-                                <Text style={[styles.buttonText, { fontSize: 16 }]}>Cadastrar Estabelecimento</Text>
+                                <Text style={[styles.buttonText, { fontSize: 16 }]}>Cadastrar</Text>
                             )}
                         </LinearGradient>
                     </TouchableOpacity>

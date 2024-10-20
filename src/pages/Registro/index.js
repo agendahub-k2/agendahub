@@ -45,7 +45,7 @@ export default function Login() {
         };
 
         try {
-            const response = await fetch('http://192.168.1.100:8080/user/create', {
+            const response = await fetch('http://localhost:8080/user/create', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(userData),
@@ -155,7 +155,7 @@ export default function Login() {
                         {loading ? (
                             <ActivityIndicator size="small" color="#FFF" />
                         ) : (
-                            <Text style={styles.buttonText}>REALIZAR CADASTRO</Text>
+                            <Text style={styles.buttonText}>Cadastrar</Text>
                         )}
                     </LinearGradient>
                 </TouchableOpacity>
