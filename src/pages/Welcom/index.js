@@ -10,7 +10,7 @@ export default function Welcome() {
     const animRef = useRef(null);
 
     const handleNavigation = (screen) => {
-        // Faz o fadeOut e navega para a tela especificada
+        // Faz o fadeOut
         animRef.current.fadeOut(600).then(() => {
             navigation.navigate(screen);
         });
@@ -18,7 +18,7 @@ export default function Welcome() {
 
     useFocusEffect(
         React.useCallback(() => {
-            // Animação de fadeIn quando a tela é focada
+            // Faz o fadeIn
             animRef.current.fadeIn();
         }, [])
     );

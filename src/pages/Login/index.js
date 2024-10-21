@@ -1,20 +1,28 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import * as Animatable from 'react-native-animatable';
-import styles from './indexStyles'; // Estilos do componente
+import styles from './indexStyles';
 
 export default function Login() {
-    const navigation = useNavigation(); 
+    const navigation = useNavigation();
+    const route = useRoute();
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
-    const [showAlert, setShowAlert] = useState(false); 
-    const [alertMessage, setAlertMessage] = useState(''); 
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
     const animRef = useRef(null);
+
+    useEffect(() => {
+        if (route.params?.clearFields) {
+            setEmail('');
+            setPassword('');
+        }
+    }, [route.params]);
 
     // Função de tratamento de login
     const handleLoginPress = () => {
@@ -23,21 +31,20 @@ export default function Login() {
             return;
         }
 
-        setLoading(true); 
+        setLoading(true);
 
         // Simulação de autenticação
         setTimeout(() => {
-            setLoading(false); 
+            setLoading(false);
             showAlertMessage('Você foi logado com sucesso!', 'success');
 
             // Redireciona para a tela Home após 3 segundos (tempo do alerta)
             setTimeout(() => {
-                navigation.navigate('Home'); 
+                navigation.navigate('Home');
             }, 3000);
         }, 2000);
     };
 
-    // Função para exibir alertas de erro ou sucesso com cores diferentes
     const showAlertMessage = (message, type) => {
         setAlertMessage(message);
         setShowAlert(type); // 'success' ou 'error'
@@ -47,15 +54,15 @@ export default function Login() {
     return (
         <View style={styles.container}>
             {showAlert && (
-                <Animatable.View 
+                <Animatable.View
                     style={[styles.alertContainer, showAlert === 'success' ? styles.successAlert : styles.errorAlert]}
-                    animation="slideInDown" // Animação de queda
-                    duration={700} // Duração da animação
+                    animation="slideInDown"
+                    duration={700}
                 >
                     <Text style={styles.alertText}>{alertMessage}</Text>
                 </Animatable.View>
             )}
-            
+
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Icon name="arrow-back" size={24} color="#000" />
@@ -68,24 +75,24 @@ export default function Login() {
             </View>
 
             <Animatable.View ref={animRef} style={styles.containerForm} animation="fadeInUp">
-                <FormField 
-                    label="E-mail" 
-                    placeholder="Digite seu E-mail..." 
-                    keyboardType="email-address" 
+                <FormField
+                    label="E-mail"
+                    placeholder="Digite seu E-mail..."
+                    keyboardType="email-address"
                     value={email}
                     onChangeText={setEmail}
                 />
 
-                <PasswordField 
-                    passwordVisible={passwordVisible} 
-                    setPasswordVisible={setPasswordVisible} 
+                <PasswordField
+                    passwordVisible={passwordVisible}
+                    setPasswordVisible={setPasswordVisible}
                     password={password}
                     setPassword={setPassword}
                 />
 
                 <TouchableOpacity onPress={handleLoginPress} style={{ marginTop: 20 }}>
                     <LinearGradient
-                        colors={['#0052D4', '#4364F7', '#6FB1FC']} 
+                        colors={['#0052D4', '#4364F7', '#6FB1FC']}
                         style={styles.button}
                     >
                         {loading ? (
@@ -96,11 +103,11 @@ export default function Login() {
                     </LinearGradient>
                 </TouchableOpacity>
 
-                <TouchableOpacity 
-                    style={styles.buttonregister} 
-                    onPress={() => navigation.navigate('Register')} 
+                <TouchableOpacity
+                    style={styles.buttonregister}
+                    onPress={() => navigation.navigate('Register')}
                 >
-                 <Text style={[styles.registerText, { textAlign: 'center', marginTop: 20 }]}>
+                    <Text style={[styles.registerText, { textAlign: 'center', marginTop: 20 }]}>
                         Não possui uma conta? <Text style={{ color: 'blue' }}>Cadastre-se</Text>
                     </Text>
                 </TouchableOpacity>

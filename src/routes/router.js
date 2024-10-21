@@ -6,6 +6,7 @@ import Register from '../pages/Registro';
 import EstabelecimentoRegister from '../pages/EstabelecimentoRegister';
 import Home from '../pages/Home/index';
 
+
 const Stack = createNativeStackNavigator();
 
 export default function Routes({ isAuthenticated, handleLogin }) {

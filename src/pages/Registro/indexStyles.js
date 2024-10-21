@@ -1,6 +1,5 @@
 import { StyleSheet } from 'react-native';
 
-
 const colors = {
     primary: '#005BB5',
     secondary: '#007ACC',
@@ -10,6 +9,7 @@ const colors = {
     placeholder: '#999',
     border: '#f0f0f0',
     registerText: '#a1a1a1',
+    error: '#ff4444', // Cor para mensagens de erro
 };
 
 const sizes = {
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
         top: 0,
         left: 0,
         right: 0,
-        backgroundColor: '#ff4444',
+        backgroundColor: colors.error,
         padding: 15,
         alignItems: 'center',
         justifyContent: 'center',
@@ -148,12 +148,34 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontWeight: 'bold',
         textAlign: 'center',
-        
     },
-    alertContainer: {
-        backgroundColor: 'green', 
-    }
-    
+    // Estilo para o checkbox e a caixinha de "Provedor"
+    providerContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: sizes.mediumMargin,
+        padding: sizes.baseMargin,
+        backgroundColor: 'linear-gradient(135deg, #6FB1FC, #4364F7)', // Gradiente azul
+        borderRadius: 50, // Bordas arredondadas
+        shadowColor: '#000', // Sombra
+    },
+    providerCheckbox: {
+        marginRight: sizes.baseMargin,
+        padding: sizes.smallMargin,
+        borderRadius: 50, // Formato circular
+        backgroundColor: '#fff', // Fundo branco para o checkbox
+        shadowColor: '#000', // Sombra para o checkbox
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 5,
+        elevation: 3,
+    },
+    // Estilo para mensagens de erro nos campos
+    errorText: {
+        color: colors.error,
+        fontSize: sizes.smallFontSize,
+        marginTop: 5,
+    },
 });
 
 export default styles;

@@ -110,13 +110,17 @@ const styles = StyleSheet.create({
     },
     alertContainer: {
         position: 'absolute',
-        top: 50,
-        left: 20,
-        right: 20,
-        zIndex: 10,
-        padding: 10,
-        borderRadius: 8,
+        top: 0,
+        left: 0,
+        right: 0,
+        backgroundColor: '#ff4444',
+        padding: 15,
         alignItems: 'center',
+        justifyContent: 'center',
+        borderBottomLeftRadius: 10,
+        borderBottomRightRadius: 10,
+        elevation: 5,
+        zIndex: 1000, 
     },
     successAlert: {
         backgroundColor: '#4CAF50', // Verde para sucesso

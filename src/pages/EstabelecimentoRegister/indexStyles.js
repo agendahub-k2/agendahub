@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     message: {
         fontSize: sizes.largeFontSize,
         fontWeight: 'bold',
-        color: colors.textLight,
+        color: colors.textLight 
     },
     containerForm: {
         flex: 1,
