@@ -42,24 +42,42 @@ export default function Login() {
 
         try {
             if (isProvider) {
-                navigation.navigate('EstabelecimentoRegister');
+                navigation.navigate('EstabelecimentoRegister', { userData });
             } else {
                 const response = await fetch('http://localhost:8080/user/create', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(userData),
                 });
-
                 const result = await response.json();
                 if (response.ok) {
                     triggerAlert('Cadastro realizado com sucesso!');
                     limparForm();
                     navigation.navigate('Login');
                 } else {
-                    // Lidar com erros de validação aqui, se necessário
+                    console.log('Resposta da API:', result.message);
+                    if (result.message === "Validation failed") {
+                        result.errors.forEach(error => {
+                            // Verifica o campo que causou o erro
+                            if (error.field === "phone") {
+                                triggerAlert('O campo de telefone não pode estar vazio.');
+                            } else if (error.field === "password") {
+                                triggerAlert('A senha deve ter entre 6 e 255 caracteres.');
+                            }
+                            else if (error.field === "name") {
+                                triggerAlert('Nome deve ter entre 6 e 255 caracteres.');
+                            }
+                            else if (error.field === "email") {
+                                triggerAlert('E-mail não é válido.');
+                            }
+                        });
+                    }else{
+                        triggerAlert('Erro - por favor, tente novamente mais tarde.');
+                    }
                 }
             }
         } catch (error) {
+            console.log('3');
             triggerAlert('Erro ao conectar com o servidor. Tente novamente.');
         } finally {
             setLoading(false);

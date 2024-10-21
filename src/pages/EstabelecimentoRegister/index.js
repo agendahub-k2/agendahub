@@ -1,15 +1,17 @@
 import React, { useState, useCallback } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ActivityIndicator, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import * as Animatable from 'react-native-animatable';
 import { Picker } from '@react-native-picker/picker';
 import styles from './indexStyles';
 import axios from 'axios';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 const EstablishmentRegister = () => {
     const navigation = useNavigation();
+    const route = useRoute();
+    const { userData } = route.params;
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         cep: '',
@@ -41,17 +43,65 @@ const EstablishmentRegister = () => {
 
     const handleRegister = async () => {
         if (!validateForm()) return;
-
+    
+        const requestBody = {
+            ...userData,
+            providerRequest: {
+                numero: formData.houseNumber,
+                descricaoRua: formData.address,
+                typeProvider: formData.establishmentType,
+                numCep: formData.cep.replace('-', '')
+            }
+        };
+    
         setLoading(true);
         try {
-            await new Promise(resolve => setTimeout(resolve, 2000));
-            navigation.navigate('Login');
-        } catch {
-            showAlertMessage('Ocorreu um erro ao cadastrar o estabelecimento.');
+            const response = await axios.post('http://localhost:8080/user/create', requestBody, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+    
+            if (response.status === 201) {
+                showAlertMessage('Provedor Cadastrado.');
+                setTimeout(() => {
+                    navigation.navigate('Login');
+                }, 3000);
+            } else {
+                console.log('Resposta da API:', response.data.message);
+                if (response.data.errors) {
+                    response.data.errors.forEach(err => {
+                        console.log(`Campo: ${err.field}, Erro: ${err.error}`);
+                    });
+                }
+                showAlertMessage('Erro ao cadastrar o usuário. Tente novamente.');
+            }
+        } catch (error) {
+            if (error.response && error.response.data) {
+                console.log('Mensagem de erro da API:', error.response.data.message);
+
+                if(error.response.data.message == "Email já cadastrado."){
+                    showAlertMessage(error.response.data.message);
+                    navigation.navigate('Register');
+                    return;
+                }
+
+                if (error.response.data.errors) {
+                    error.response.data.errors.forEach(err => {
+                        console.log(`Campo: ${err.field}, Erro: ${err.error}`);
+                    });
+                }
+                showAlertMessage('Erro ao cadastrar o usuário. Verifique os campos e tente novamente.');
+            } else {
+                console.log('Erro:', error.message);
+                showAlertMessage('Ocorreu um erro inesperado. Tente novamente.');
+            }
         } finally {
             setLoading(false);
         }
     };
+    
+    
 
     const fetchAddress = useCallback(async () => {
         const { cep } = formData;
@@ -66,9 +116,7 @@ const EstablishmentRegister = () => {
     }, [formData]);
         const handleCepChange = (value) => {
         const formattedCep = value.replace(/\D/g, '').replace(/(\d{5})(\d{3})/, '$1-$2');
-        handleChange('cep', formattedCep); 
-        // Validação de CEP no formato 00000-000
-    
+        handleChange('cep', formattedCep);
     };
 
     return (
@@ -119,7 +167,7 @@ const EstablishmentRegister = () => {
                             onValueChange={(itemValue) => handleChange('establishmentType', itemValue)}
                             style={[styles.input, { height: 40, marginTop: 10 }]}
                         >
-                            <Picker.Item label="Selecione o tipo de estabelecimento" value="" />
+                            <Picker.Item label="Qual finalidade da agenda" value="" />
                             <Picker.Item label="Consultório Médico" value="Consultório Médico" />
                             <Picker.Item label="Clínica de Estética" value="Clínica de Estética" />
                             <Picker.Item label="Academia" value="Academia" />
