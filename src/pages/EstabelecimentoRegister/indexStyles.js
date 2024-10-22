@@ -126,23 +126,24 @@ const styles = StyleSheet.create({
     
     alertContainer: {
         position: 'absolute',
-        top: 5, 
+        top: 5,
         left: 0,
         right: 0,
         backgroundColor: '#ff4444',
         padding: 15,
         alignItems: 'center',
         justifyContent: 'center',
-        borderBottomLeftRadius: 10, 
-        borderBottomRightRadius: 10, 
+        borderBottomLeftRadius: 10,
+        borderBottomRightRadius: 10,
         elevation: 5,
-        zIndex: 1000, // Adicionei zIndex para garantir que apareça acima de outros componentes//
+        zIndex: 1000, 
     },
     alertText: {
-        color: '#fff',
+        color: '#000',
         fontWeight: 'bold',
         textAlign: 'center',
     },
+
 });
 
 export default styles;

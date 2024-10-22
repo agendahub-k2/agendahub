@@ -18,16 +18,17 @@ export default function Login() {
     const [alertMessage, setAlertMessage] = useState('');
 
     // Inicializando o hook useForm
-    const { control, handleSubmit, formState: { errors }, watch } = useForm();
+    const { control, handleSubmit, formState: { errors }, watch, reset } = useForm();
 
-    const limparForm = () => {
-    };
-
-    useFocusEffect(
-        useCallback(() => {
-            limparForm();
-        }, [])
-    );
+const limparForm = () => {
+    reset({
+        fullName: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+        phone: ''
+    });
+};
 
     const onSubmit = async (data) => {
         const userData = {
@@ -52,13 +53,12 @@ export default function Login() {
                 const result = await response.json();
                 if (response.ok) {
                     triggerAlert('Cadastro realizado com sucesso!');
-                    limparForm();
+                    limparForm(); 
                     navigation.navigate('Login');
                 } else {
                     console.log('Resposta da API:', result.message);
                     if (result.message === "Validation failed") {
                         result.errors.forEach(error => {
-                            // Verifica o campo que causou o erro
                             if (error.field === "phone") {
                                 triggerAlert('O campo de telefone não pode estar vazio.');
                             } else if (error.field === "password") {
@@ -71,7 +71,7 @@ export default function Login() {
                                 triggerAlert('E-mail não é válido.');
                             }
                         });
-                    }else{
+                    } else {
                         triggerAlert('Erro - por favor, tente novamente mais tarde.');
                     }
                 }
@@ -131,6 +131,11 @@ export default function Login() {
                     control={control}
                     rules={{
                         required: 'Campo obrigatório.',
+                        minLength: {
+                            value: 6,
+                            message: 'Nome deve ter no mínimo 6 caracteres.',
+                        },
+                        
                     }}
                     render={({ field: { onChange, onBlur, value } }) => (
                         <FormField
@@ -149,7 +154,7 @@ export default function Login() {
                 <Controller
                     control={control}
                     rules={{
-                        required: 'Campo obrigatório.',
+                        required: 'Campo obrigatório.',    //validação de telefone ok
                         pattern: {
                             value: /^\(\d{2}\) \d{5}-\d{4}$/,
                             message: 'Telefone inválido. Use o formato (XX) XXXXX-XXXX.',
@@ -167,8 +172,8 @@ export default function Login() {
 
                 <Controller
                     control={control}
-                    rules={{
-                        required: 'Campo obrigatório.',
+                    rules={{                          //validação de e-mail ok
+                        required: 'Campo obrigatório.', 
                         pattern: {
                             value: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/,
                             message: 'E-mail inválido.',

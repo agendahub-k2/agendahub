@@ -21,6 +21,7 @@ const EstablishmentRegister = () => {
     });
     const [alertMessage, setAlertMessage] = useState('');
     const [showAlert, setShowAlert] = useState(false);
+    const [alertColor, setAlertColor] = useState('');
 
     const handleChange = (name, value) => {
         setFormData(prev => ({ ...prev, [name]: value }));
@@ -28,6 +29,7 @@ const EstablishmentRegister = () => {
 
     const showAlertMessage = (message) => {
         setAlertMessage(message);
+        setAlertColor(color = '#4CAF50'); // Definindo a cor do alerta//
         setShowAlert(true);
         setTimeout(() => setShowAlert(false), 3000);
     };
@@ -43,7 +45,7 @@ const EstablishmentRegister = () => {
 
     const handleRegister = async () => {
         if (!validateForm()) return;
-    
+        
         const requestBody = {
             ...userData,
             providerRequest: {
@@ -67,41 +69,39 @@ const EstablishmentRegister = () => {
                 setTimeout(() => {
                     navigation.navigate('Login');
                 }, 3000);
-            } else {
-                console.log('Resposta da API:', response.data.message);
-                if (response.data.errors) {
-                    response.data.errors.forEach(err => {
-                        console.log(`Campo: ${err.field}, Erro: ${err.error}`);
-                    });
-                }
-                showAlertMessage('Erro ao cadastrar o usuário. Tente novamente.');
+        } else {
+            console.log('Resposta da API:', response.data.message);
+            if (response.data.errors) {
+                response.data.errors.forEach(err => {
+                    console.log(`Campo: ${err.field}, Erro: ${err.error}`);
+                });
             }
-        } catch (error) {
-            if (error.response && error.response.data) {
-                console.log('Mensagem de erro da API:', error.response.data.message);
+            showAlertMessage('Erro ao cadastrar o usuário. Tente novamente.');
+        }
+    } catch (error) {
+        if (error.response && error.response.data) {
+            console.log('Mensagem de erro da API:', error.response.data.message);
 
-                if(error.response.data.message == "Email já cadastrado."){
-                    showAlertMessage(error.response.data.message);
-                    navigation.navigate('Register');
-                    return;
-                }
-
-                if (error.response.data.errors) {
-                    error.response.data.errors.forEach(err => {
-                        console.log(`Campo: ${err.field}, Erro: ${err.error}`);
-                    });
-                }
-                showAlertMessage('Erro ao cadastrar o usuário. Verifique os campos e tente novamente.');
-            } else {
-                console.log('Erro:', error.message);
-                showAlertMessage('Ocorreu um erro inesperado. Tente novamente.');
+            if(error.response.data.message == "Email já cadastrado."){
+                showAlertMessage(error.response.data.message);
+                navigation.navigate('Register');
+                return;
             }
+
+            if (error.response.data.errors) {
+                error.response.data.errors.forEach(err => {
+                    console.log(`Campo: ${err.field}, Erro: ${err.error}`);
+                });
+            }
+            showAlertMessage('Erro ao cadastrar o usuário. Verifique os campos e tente novamente.');
+        } else {
+            console.log('Erro:', error.message);
+            showAlertMessage('Ocorreu um erro inesperado. Tente novamente.');
+        }
         } finally {
             setLoading(false);
         }
     };
-    
-    
 
     const fetchAddress = useCallback(async () => {
         const { cep } = formData;
@@ -109,14 +109,17 @@ const EstablishmentRegister = () => {
             const response = await axios.get(`https://viacep.com.br/ws/${cep.replace('-', '')}/json/`);
             if (response.data && !response.data.erro) {
                 handleChange('address', response.data.logradouro);
+            } else {
+                showAlertMessage('CEP inválido. Por favor, verifique.', '#FFFF00'); // Amarelo para CEP inválido
             }
         } catch {
-            showAlertMessage('Erro ao buscar endereço.');
+            showAlertMessage('Erro ao buscar endereço.', '#ff4444'); // vermelho para erro de BUSCA
         }
     }, [formData]);
-        const handleCepChange = (value) => {
+
+    const handleCepChange = (value) => {
         const formattedCep = value.replace(/\D/g, '').replace(/(\d{5})(\d{3})/, '$1-$2');
-        handleChange('cep', formattedCep);
+        handleChange('cep', formattedCep); 
     };
 
     return (
@@ -167,50 +170,44 @@ const EstablishmentRegister = () => {
                             onValueChange={(itemValue) => handleChange('establishmentType', itemValue)}
                             style={[styles.input, { height: 40, marginTop: 10 }]}
                         >
-                            <Picker.Item label="Qual finalidade da agenda" value="" />
+                            <Picker.Item label="Qual a finalidade da agenda" value="" />
                             <Picker.Item label="Consultório Médico" value="Consultório Médico" />
                             <Picker.Item label="Clínica de Estética" value="Clínica de Estética" />
                             <Picker.Item label="Academia" value="Academia" />
                             <Picker.Item label="Barbearia" value="Barbearia" />
-                            <Picker.Item label="Salão de Beleza" value="Salão de Beleza" />
-                            <Picker.Item label="Escola de Idiomas" value="Escola de Idiomas" />
-                            <Picker.Item label="Estúdio de Yoga" value="Estúdio de Yoga" />
-                            <Picker.Item label="Pet Shop" value="Pet Shop" />
-                            <Picker.Item label="Centro de Fisioterapia" value="Centro de Fisioterapia" />
-                            <Picker.Item label="Autoescola" value="Autoescola" />
-                            <Picker.Item label="Escritório de Advocacia" value="Escritório de Advocacia" />
-                            <Picker.Item label="Consultório Odontológico" value="Consultório Odontológico" />
-                            <Picker.Item label="Centro Médico" value="Centro Médico" />
-                            <Picker.Item label="Estúdio de Fotografia" value="Estúdio de Fotografia" />
-                            <Picker.Item label="Clínica de Psicologia" value="Clínica de Psicologia" />
-                            <Picker.Item label="Clínica de Massagem" value="Clínica de Massagem" />
-                            <Picker.Item label="Estúdio de Pilates" value="Estúdio de Pilates" />
-                            <Picker.Item label="Tatuador" value="Tatuador" />
-                            <Picker.Item label="Escola de Música" value="Escola de Música" />
-                            <Picker.Item label="Consultoria Financeira" value="Consultoria Financeira" />
-                            <Picker.Item label="Consultoria de TI" value="Consultoria de TI" />
-                            <Picker.Item label="Clínica de Nutrição" value="Clínica de Nutrição" />
-                            <Picker.Item label="Clínica de Dermatologia" value="Clínica de Dermatologia" />
-                            <Picker.Item label="Estúdio de Dança" value="Estúdio de Dança" />
-                            <Picker.Item label="Oficina Mecânica" value="Oficina Mecânica" />
-                            <Picker.Item label="Atelier de Costura" value="Atelier de Costura" />
-                            <Picker.Item label="Clínica de Cardiologia" value="Clínica de Cardiologia" />
-                            <Picker.Item label="Estúdio de Design de Sobrancelhas" value="Estúdio de Design de Sobrancelhas" />
-                            <Picker.Item label="Clínica de Urologia" value="Clínica de Urologia" />
-                            <Picker.Item label="Clínica de Ginecologia" value="Clínica de Ginecologia" />
-                            <Picker.Item label="Consultório de Ortopedia" value="Consultório de Ortopedia" />
-                            <Picker.Item label="Consultório de Endocrinologia" value="Consultório de Endocrinologia" />
-                            <Picker.Item label="Clínica de Psicopedagogia" value="Clínica de Psicopedagogia" />
-                            <Picker.Item label="Clínica de Oncologia" value="Clínica de Oncologia" />
-                            <Picker.Item label="Clínica de Nefrologia" value="Clínica de Nefrologia" />
-                            <Picker.Item label="Centro de Terapias Holísticas" value="Centro de Terapias Holísticas" />
-                            <Picker.Item label="Clínica de Fonoaudiologia" value="Clínica de Fonoaudiologia" />
-                            <Picker.Item label="Estúdio de Crossfit" value="Estúdio de Crossfit" />
-                            <Picker.Item label="Centro de Podologia" value="Centro de Podologia" />
+                            <Picker.Item label="Clínica de Oftalmologia" value="Clínica de Oftalmologia" />
+                            <Picker.Item label="Clínica de Quiropraxia" value="Clínica de Quiropraxia" />
+                            <Picker.Item label="Estúdio de Maquiagem" value="Estúdio de Maquiagem" />
+                            <Picker.Item label="Clínica de Medicina Esportiva" value="Clínica de Medicina Esportiva" />
                             <Picker.Item label="Clínica de Geriatria" value="Clínica de Geriatria" />
-                            <Picker.Item label="Consultório de Neurologia" value="Consultório de Neurologia" />
-                            <Picker.Item label="Centro de Treinamento Funcional" value="Centro de Treinamento Funcional" />
+                            <Picker.Item label="Clínica de Fisioterapia Esportiva" value="Clínica de Fisioterapia Esportiva" />
+                            <Picker.Item label="Clínica de Reabilitação" value="Clínica de Reabilitação" />
+                            <Picker.Item label="Estúdio de Personal Trainer" value="Estúdio de Personal Trainer" />
+                            <Picker.Item label="Centro de Terapias Alternativas" value="Centro de Terapias Alternativas" />
+                            <Picker.Item label="Consultório de Psiquiatria" value="Consultório de Psiquiatria" />
+                            <Picker.Item label="Consultório de Otorrinolaringologia" value="Consultório de Otorrinolaringologia" />
+                            <Picker.Item label="Consultório de Nutrologia" value="Consultório de Nutrologia" />
+                            <Picker.Item label="Centro de Terapia Ocupacional" value="Centro de Terapia Ocupacional" />
+                            <Picker.Item label="Estúdio de Depilação" value="Estúdio de Depilação" />
+                            <Picker.Item label="Clínica de Podologia Esportiva" value="Clínica de Podologia Esportiva" />
+                            <Picker.Item label="Clínica de Endocrinologia" value="Clínica de Endocrinologia" />
+                            <Picker.Item label="Centro de Acupuntura" value="Centro de Acupuntura" />
+                            <Picker.Item label="Clínica de Terapia Cognitivo-Comportamental" value="Clínica de Terapia Cognitivo-Comportamental" />
+                            <Picker.Item label="Consultório de Cardiologia" value="Consultório de Cardiologia" />
+                            <Picker.Item label="Centro de Estética Avançada" value="Centro de Estética Avançada" />
+                            <Picker.Item label="Consultório de Pediatria" value="Consultório de Pediatria" />
+                            <Picker.Item label="Centro de Reabilitação Postural" value="Centro de Reabilitação Postural" />
+                            <Picker.Item label="Clínica de Estética Facial" value="Clínica de Estética Facial" />
+                            <Picker.Item label="Consultório de Dermatologia Estética" value="Consultório de Dermatologia Estética" />
+                            <Picker.Item label="Centro de Reabilitação Neurológica" value="Centro de Reabilitação Neurológica" />
+                            <Picker.Item label="Clínica de Cirurgia Plástica" value="Clínica de Cirurgia Plástica" />
+                            <Picker.Item label="Centro de Medicina do Sono" value="Centro de Medicina do Sono" />
+                            <Picker.Item label="Clínica de Psicoterapia" value="Clínica de Psicoterapia" />
+                            <Picker.Item label="Clínica de Medicina Ocupacional" value="Clínica de Medicina Ocupacional" />
+                            <Picker.Item label="Centro de Psicologia Infantil" value="Centro de Psicologia Infantil" />
+                            <Picker.Item label="Clínica de Reabilitação Esportiva" value="Clínica de Reabilitação Esportiva" />
                         </Picker>
+
                     </View>
 
                     <TouchableOpacity onPress={handleRegister} style={{ marginTop: 20 }}>
@@ -229,7 +226,7 @@ const EstablishmentRegister = () => {
             </ScrollView>
 
             {showAlert && (
-                <View style={styles.alertContainer}>
+                <View style={[styles.alertContainer, { backgroundColor: alertColor }]}>
                     <Text style={styles.alertText}>{alertMessage}</Text>
                 </View>
             )}
@@ -239,7 +236,7 @@ const EstablishmentRegister = () => {
 
 const FormField = ({ label, placeholder, value, onChangeText, editable = true, onBlur, style }) => (
     <>
-        <Text style={[styles.title, { fontSize: 14 }]}>{label}</Text>
+        {label && <Text style={[styles.title, { fontSize: 14 }]}>{label}</Text>}
         <View style={[styles.inputContainer, style]}>
             <TextInput
                 placeholder={placeholder}
