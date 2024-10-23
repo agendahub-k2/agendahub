@@ -25,7 +25,7 @@ export default function Login() {
     }, [route.params]);
 
     // Função de tratamento de login
-    const handleLoginPress = () => {
+    const handleLoginPress = async () => {
         if (!email || !password) {
             showAlertMessage('Por favor, preencha todos os campos.', 'error');
             return;
@@ -33,17 +33,35 @@ export default function Login() {
 
         setLoading(true);
 
-        // Simulação de autenticação
-        setTimeout(() => {
-            setLoading(false);
-            showAlertMessage('Você foi logado com sucesso!', 'success');
+        try {
+            const response = await fetch('http://localhost:8080/user/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password,
+                }),
+            });
 
-            // Redireciona para a tela Home após 3 segundos (tempo do alerta)
-            setTimeout(() => {
-                navigation.navigate('Home');
-            }, 3000);
-        }, 2000);
+            const data = await response.json();
+
+            if (response.ok) {
+                showAlertMessage('Você foi logado com sucesso!', 'success');
+                setTimeout(() => {
+                    navigation.navigate('Home');
+                }, 3000);
+            } else {
+                showAlertMessage(data.message || 'Erro ao fazer login', 'error');
+            }
+        } catch (error) {
+            showAlertMessage('Erro de conexão. Tente novamente mais tarde.', 'error');
+        } finally {
+            setLoading(false);
+        }
     };
+
 
     const showAlertMessage = (message, type) => {
         setAlertMessage(message);

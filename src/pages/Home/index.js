@@ -7,9 +7,7 @@ const Home = () => {
     const navigation = useNavigation();
 
     const handleLogout = () => {
-        // Aqui você pode adicionar a lógica para deslogar o usuário
-        // Por enquanto, vamos redirecionar para a tela de home
-        navigation.navigate('Home');
+        navigation.navigate('Login');
     };
 
     return (

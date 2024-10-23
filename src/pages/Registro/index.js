@@ -37,6 +37,9 @@ const limparForm = () => {
             password: data.password,
             userType: isProvider ? "PROVEDOR" : "SOLICITANTE",
             phone: data.phone,
+            providerRequest: {
+                id: 1
+            }
         };
 
         setLoading(true);
@@ -87,7 +90,7 @@ const limparForm = () => {
     const triggerAlert = (message) => {
         setAlertMessage(message);
         setAlertVisible(true);
-        setTimeout(() => setAlertVisible(false), 5000);
+        setTimeout(() => setAlertVisible(false), 4000);
     };
 
     const showProviderAlert = () => {
