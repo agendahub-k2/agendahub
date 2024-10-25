@@ -5,6 +5,8 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import * as Animatable from 'react-native-animatable';
 import styles from './indexStyles';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 export default function Login() {
     const navigation = useNavigation();
@@ -48,14 +50,17 @@ export default function Login() {
             const data = await response.json();
 
             if (response.ok) {
-                showAlertMessage('Você foi logado com sucesso!', 'success');
+                const token = data.token;
+                await AsyncStorage.setItem('userToken', token);
                 setTimeout(() => {
                     navigation.navigate('Home');
-                }, 3000);
+                }, 1000);
             } else {
+                await AsyncStorage.removeItem('userToken');
                 showAlertMessage(data.message || 'Erro ao fazer login', 'error');
             }
         } catch (error) {
+            await AsyncStorage.removeItem('userToken');
             showAlertMessage('Erro de conexão. Tente novamente mais tarde.', 'error');
         } finally {
             setLoading(false);

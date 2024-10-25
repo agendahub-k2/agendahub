@@ -2,13 +2,20 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Home = () => {
     const navigation = useNavigation();
 
-    const handleLogout = () => {
-        navigation.navigate('Login');
+    const handleLogout = async () => {
+        try {
+            await AsyncStorage.removeItem('userToken');
+            navigation.navigate('Login');
+        } catch (error) {
+            console.error('Erro ao tentar fazer logout:', error);
+        }
     };
+    
 
     return (
         <View style={styles.container}>
