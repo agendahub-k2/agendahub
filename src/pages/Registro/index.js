@@ -80,7 +80,6 @@ const limparForm = () => {
                 }
             }
         } catch (error) {
-            console.log('3');
             triggerAlert('Erro ao conectar com o servidor. Tente novamente.');
         } finally {
             setLoading(false);

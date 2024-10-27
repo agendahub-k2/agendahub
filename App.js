@@ -1,54 +1,54 @@
-import React, { useEffect, useState } from 'react';
-import { StatusBar, ActivityIndicator, View } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import Routes from './src/routes/router';
+  import React, { useEffect, useState } from 'react';
+  import { StatusBar, ActivityIndicator, View } from 'react-native';
+  import { NavigationContainer } from '@react-navigation/native';
+  import AsyncStorage from '@react-native-async-storage/async-storage';
+  import Routes from './src/routes/router';
 
-export default function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(null);
-  const [loading, setLoading] = useState(true);
+  export default function App() {
+    const [isAuthenticated, setIsAuthenticated] = useState(null);
+    const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const checkAuthentication = async () => {
-      try {
-        const token = await AsyncStorage.getItem('userToken');
-        
-        if (token) {
-          const response = await fetch('http://localhost:8080/user/authenticate', {
-            method: 'GET',
-            headers: {
-              'Authorization': `Bearer ${token}`,
-            },
-          });
+    useEffect(() => {
+      const checkAuthentication = async () => {
+        try {
+          const token = await AsyncStorage.getItem('userToken');
+          
+          if (token) {
+            const response = await fetch('http://localhost:8080/user/authenticate', {
+              method: 'GET',
+              headers: {
+                'Authorization': `Bearer ${token}`,
+              },
+            });
 
-          console.log("logado "+ token)
-          setIsAuthenticated(response.ok);
-        } else {
+            console.log("logado "+ token)
+            setIsAuthenticated(response.ok);
+          } else {
+            setIsAuthenticated(false);
+          }
+        } catch (error) {
+          console.error('Erro ao verificar autenticação:', error);
           setIsAuthenticated(false);
+        } finally {
+          setLoading(false);
         }
-      } catch (error) {
-        console.error('Erro ao verificar autenticação:', error);
-        setIsAuthenticated(false);
-      } finally {
-        setLoading(false);
-      }
-    };
+      };
 
-    checkAuthentication();
-  }, []);
+      checkAuthentication();
+    }, []);
 
-  if (loading) {
+    if (loading) {
+      return (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <ActivityIndicator size="large" color="#007BFF" />
+        </View>
+      );
+    }
+
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" color="#007BFF" />
-      </View>
+      <NavigationContainer>
+        <StatusBar backgroundColor="#005BB5" barStyle="light-content" />
+        <Routes isAuthenticated={isAuthenticated} />
+      </NavigationContainer>
     );
   }
-
-  return (
-    <NavigationContainer>
-      <StatusBar backgroundColor="#005BB5" barStyle="light-content" />
-      <Routes isAuthenticated={isAuthenticated} />
-    </NavigationContainer>
-  );
-}

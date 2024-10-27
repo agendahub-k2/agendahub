@@ -52,8 +52,14 @@ export default function Login() {
             if (response.ok) {
                 const token = data.token;
                 await AsyncStorage.setItem('userToken', token);
+                console.log(data.userType)
                 setTimeout(() => {
-                    navigation.navigate('Home');
+                    if(data.userType == "PROVEDOR"){
+                        navigation.navigate('HomeProvider');
+                    }else{
+                        navigation.navigate('Home');
+                    }
+                    
                 }, 1000);
             } else {
                 await AsyncStorage.removeItem('userToken');

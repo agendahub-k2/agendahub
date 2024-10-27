@@ -5,6 +5,7 @@ import Login from '../pages/Login';
 import Register from '../pages/Registro';
 import EstabelecimentoRegister from '../pages/EstabelecimentoRegister';
 import Home from '../pages/Home/index';
+import HomeProvider from '../pages/HomeProvider';
 
 
 const Stack = createNativeStackNavigator();
@@ -44,6 +45,11 @@ export default function Routes({ isAuthenticated, handleLogin }) {
                     <Stack.Screen
                         name="Home"
                         component={Home}
+                        options={{ headerShown: false }}
+                    />
+                     <Stack.Screen
+                        name="HomeProvider"
+                        component={HomeProvider}
                         options={{ headerShown: false }}
                     />
                 </>
