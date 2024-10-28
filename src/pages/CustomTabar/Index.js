@@ -28,23 +28,23 @@ export default function CustomTabBar({ state, descriptors, navigation }) {
                         });
                     };
 
-                    // Definindo ícones atualizados com base no nome da rota
+                    // icones das rotas
                     let iconName;
                     switch (route.name) {
                         case 'Home':
-                            iconName = 'home-outline'; // Ícone atualizado para Home
+                            iconName = 'home-outline'; 
                             break;
                         case 'HomeProvider':
-                            iconName = 'storefront'; // Ícone atualizado para HomeProvider
+                            iconName = 'storefront'; 
                             break;
                         case 'Agenda':
-                            iconName = 'calendar'; // Ícone atualizado para Agenda
+                            iconName = 'calendar'; 
                             break;
                         case 'Perfil':
-                            iconName = 'account'; // Ícone atualizado para Perfil
+                            iconName = 'account';
                             break;
                         default:
-                            iconName = 'home-outline'; // Ícone padrão
+                            iconName = 'home-outline';
                     }
 
                     return (
