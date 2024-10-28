@@ -3,6 +3,8 @@
   import { NavigationContainer } from '@react-navigation/native';
   import AsyncStorage from '@react-native-async-storage/async-storage';
   import Routes from './src/routes/router';
+  
+
 
   export default function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(null);

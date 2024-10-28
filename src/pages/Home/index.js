@@ -15,8 +15,6 @@ const Home = () => {
             console.error('Erro ao tentar fazer logout:', error);
         }
     };
-    
-
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Bem-vindo à Tela Home!</Text>
