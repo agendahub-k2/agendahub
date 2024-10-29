@@ -1,13 +1,16 @@
 import React from 'react';
 import { View, Image, Text, StyleSheet } from "react-native";
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialIcons } from '@expo/vector-icons'; 
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import CustomTabBar from '../CustomTabar/Index'; 
 
-export default function Home({ navigation }) {
+const Tab = createBottomTabNavigator();
+
+function HomeScreen({ navigation }) {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                
                 <TouchableOpacity onPress={() => navigation.openDrawer()} style={styles.menuIcon}>
                     <MaterialIcons name="menu" size={24} color="#121212" /> 
                 </TouchableOpacity>
@@ -23,6 +26,42 @@ export default function Home({ navigation }) {
                 </View>
             </View>
         </View>
+    );
+}
+
+function AgendaScreen() {
+    return (
+        <View style={styles.container}>
+            <Text>Agenda Screen</Text>
+        </View>
+    );
+}
+
+function ProfileScreen() {
+    return (
+        <View style={styles.container}>
+            <Text>Profile Screen</Text>
+        </View>
+    );
+}
+function HomeProviderScreen() {
+    return (
+        <View style={styles.container}>
+            <Text>HomeProvider Screen</Text>
+        </View>
+    );
+}
+
+
+// Configuração das Abas com CustomTabBar
+export default function Home() {
+    return (
+        <Tab.Navigator tabBar={(props) => <CustomTabBar {...props} />}>
+            <Tab.Screen name="Home" component={HomeScreen} />
+            <Tab.Screen name="Agenda" component={AgendaScreen} />
+            <Tab.Screen name="Perfil" component={ProfileScreen} />
+            <Tab.Screen name="HomeProvider" component={HomeProviderScreen} />
+        </Tab.Navigator>
     );
 }
 
