@@ -1,74 +1,61 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { useNavigation } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { View, Image, Text, StyleSheet } from "react-native";
+import { MaterialIcons } from '@expo/vector-icons'; 
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const HomeProvider = () => {
-    const navigation = useNavigation();
-
-    const handleLogout = async () => {
-        try {
-            await AsyncStorage.removeItem('userToken');
-            navigation.navigate('Login');
-        } catch (error) {
-            console.error('Erro ao tentar fazer logout:', error);
-        }
-    };
-    
-
+export default function Home({ navigation }) {
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Bem-vindo à Tela de agenda provedor!</Text>
-            <Text style={styles.subtitle}>Estamos felizes em tê-lo aqui.</Text>
+            <View style={styles.header}>
+                
+                <TouchableOpacity onPress={() => navigation.openDrawer()} style={styles.menuIcon}>
+                    <MaterialIcons name="menu" size={24} color="#121212" /> 
+                </TouchableOpacity>
 
-            <TouchableOpacity onPress={handleLogout} style={styles.button}>
-                <LinearGradient
-                    colors={['#0052D4', '#4364F7', '#6FB1FC']}
-                    style={styles.gradientButton}
-                >
-                    <Text style={styles.buttonText}>Logout</Text>
-                </LinearGradient>
-            </TouchableOpacity>
+                <Image 
+                    source={{ uri: "https://github.com/Devwillmarinho.png" }} 
+                    style={styles.img}
+                />
+
+                <View style={styles.user}>
+                    <Text style={styles.hi}>Olá,</Text>
+                    <Text style={styles.username}>Willian Marinho</Text>
+                </View>
+            </View>
         </View>
     );
-};
+}
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#fff',
-        padding: 20,
+        padding: 24,
+        paddingTop: 32,
+        backgroundColor: "#FFFFFF",
     },
-    title: {
-        fontSize: 28,
-        fontWeight: 'bold',
-        color: '#005BB5',
-        marginBottom: 10,
+    header: {
+        width: "100%",
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 7,
     },
-    subtitle: {
-        fontSize: 18,
-        color: '#666',
-        marginBottom: 30,
-        textAlign: 'center',
+    img: {
+        width: 50,
+        height: 50,
+        borderRadius: 12,
     },
-    button: {
-        width: '100%',
-        borderRadius: 8,
-        overflow: 'hidden',
+    user: {
+        flex: 1,
+        justifyContent: "center",
     },
-    gradientButton: {
-        paddingVertical: 15,
-        alignItems: 'center',
-        borderRadius: 8,
+    hi: {
+        fontSize: 10,
     },
-    buttonText: {
-        color: '#FFF',
-        fontSize: 18,
-        fontWeight: 'bold',
+    username: {
+        fontSize: 16,
+        fontWeight: "700",
+    },
+    menuIcon: {
+        marginRight: 10, 
     },
 });
-
-export default HomeProvider;
